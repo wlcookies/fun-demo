@@ -13,6 +13,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -89,6 +91,7 @@ public class BluetoothActivity extends BaseActivity {
 
         mBluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         mBluetoothAdapter = mBluetoothManager.getAdapter();
+
         mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
 
         mOpenBt = findViewById(R.id.open_bt);
@@ -120,22 +123,39 @@ public class BluetoothActivity extends BaseActivity {
             }
         });
 
+
+        ActivityResultLauncher<Intent> testLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                Log.d(TAG, "执行结果: --- " + result.getResultCode());
+                if(result.getResultCode() == RESULT_OK){
+                    Log.d(TAG, "执行结果: --- 成功" + result.getResultCode());
+                }else if(result.getResultCode() == RESULT_CANCELED){
+                    Log.d(TAG, "执行结果: --- 取消" + result.getResultCode());
+                }
+            }
+        });
+
         // 打开蓝牙
         mOpenBt.setOnClickListener(v -> {
             // 判断蓝牙是否打开
-            if (isOpenBluetooth()) {
-                ToastUtils.showMsg("蓝牙已经打开");
-                return;
-            }
-            if (!(hasPermission(Manifest.permission.BLUETOOTH) && hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) && hasPermission(Manifest.permission.BLUETOOTH_SCAN))) {
-                permissionLaunch.launch(new String[]{
-                        Manifest.permission.BLUETOOTH,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                });
-                return;
-            }
-            enableBluetoothLaunch.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            testLauncher.launch(intent);
+
+//            if (isOpenBluetooth()) {
+//                ToastUtils.showMsg("蓝牙已经打开");
+//                return;
+//            }
+//
+//            if (!(hasPermission(Manifest.permission.BLUETOOTH) && hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) && hasPermission(Manifest.permission.BLUETOOTH_SCAN))) {
+//                permissionLaunch.launch(new String[]{
+//                        Manifest.permission.BLUETOOTH,
+//                        Manifest.permission.ACCESS_FINE_LOCATION,
+//                        Manifest.permission.ACCESS_COARSE_LOCATION
+//                });
+//                return;
+//            }
+//            enableBluetoothLaunch.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
         });
 
         ScanCallback scanCallback = new ScanCallback() {

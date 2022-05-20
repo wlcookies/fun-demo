@@ -18,3 +18,5 @@ rootProject.name = "fun-demo"
 include ':app'
 include ':common-module'
 include ':increase-decrease-widget'
+include ':bluetooth-common-module'
+include ':mediasession-module'

@@ -44,7 +44,12 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:${rootProject.ext.ext_junit_version}"
     androidTestImplementation "androidx.test.espresso:${rootProject.ext.espresso_core_version}"
 
+    // 通用模块
     implementation project(path: ':common-module')
+    // 蓝牙相关模块
+    implementation project(path: ':bluetooth-common-module')
+    // mediasession相关模块
+    implementation project(path: ':mediasession-module')
 
     // androidX media2
     implementation "androidx.media2:media2-session:${rootProject.ext.media2_version}"
