@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">510</string>
+    <string name="main_bottom_menu_widget">控件</string>
+    <string name="main_bottom_menu_tool">工具</string>
+    <string name="main_bottom_menu_demo">示例</string>
+    <string name="open_bluetooth">打开蓝牙</string>
+    <string name="start_scan_bluetooth">开启扫描</string>
+    <string name="stop_start_bluetooth">停止扫描</string>
+</resources>

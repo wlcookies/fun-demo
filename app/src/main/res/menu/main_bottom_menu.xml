@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_widgets"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_widgets_24"
+        android:title="@string/main_bottom_menu_widget" />
+
+    <item
+        android:id="@+id/menu_tool"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_settings_ethernet_24"
+        android:title="@string/main_bottom_menu_tool" />
+
+    <item
+        android:id="@+id/menu_demo"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_my_location_24"
+        android:title="@string/main_bottom_menu_demo" />
+</menu>

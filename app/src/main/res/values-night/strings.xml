@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_bottom_menu_widget">控件</string>
+    <string name="main_bottom_menu_tool">工具</string>
+    <string name="main_bottom_menu_demo">示例</string>
+</resources>
