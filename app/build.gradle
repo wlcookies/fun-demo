@@ -52,7 +52,7 @@ dependencies {
     implementation "androidx.media2:media2-player:${rootProject.ext.media2_version}"
 
     // 列表适配器
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:${rootProject.ext.BaseRecyclerViewAdapterHelper_version}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview_version}"
 
 }

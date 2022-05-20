@@ -28,4 +28,9 @@ ext {
     espresso_core_version = '3.4.0'
 
     media2_version = "1.2.1"
+
+    // BaseRecyclerViewAdapterHelper
+    BaseRecyclerViewAdapterHelper_version = "3.0.7"
+    // recyclerview
+    recyclerview_version = "1.2.1"
 }
