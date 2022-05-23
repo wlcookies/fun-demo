@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wlcookies.mediasessionmodule">
 
-    <application>
-        <service
-            android:name=".TestService"
-            android:enabled="true"
-            android:exported="true" />
-    </application>
+    <application></application>
 
 </manifest>

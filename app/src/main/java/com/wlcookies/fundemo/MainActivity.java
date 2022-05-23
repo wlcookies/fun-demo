@@ -20,6 +20,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.wlcookies.fundemo.ui.DemoFragment;
 import com.wlcookies.fundemo.ui.ToolFragment;
 import com.wlcookies.fundemo.ui.WidgetFragment;
+import com.wlcookies.mediasessionmodule.MediaClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,9 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
         setContentView(R.layout.activity_main);
 
         initData();
+
+        MediaClient mediaClient = new MediaClient(this, "com.netease.cloudmusic", null);
+
     }
 
     private void initData() {
