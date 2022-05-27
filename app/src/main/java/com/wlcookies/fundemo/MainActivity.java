@@ -1,5 +1,7 @@
 package com.wlcookies.fundemo;
 
+import static com.wlcookies.mediasessionmodule.MediaClient.log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,6 +9,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -38,8 +44,11 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
 
         initData();
 
-        MediaClient mediaClient = new MediaClient(this, "com.netease.cloudmusic", null);
 
+        List<PackageInfo> installedPackages = getPackageManager().getInstalledPackages(0);
+        for (PackageInfo installedPackage : installedPackages) {
+            log(installedPackage.packageName);
+        }
     }
 
     private void initData() {

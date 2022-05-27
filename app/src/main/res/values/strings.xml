@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">510</string>
+    <string name="app_name">Demo</string>
     <string name="main_bottom_menu_widget">控件</string>
     <string name="main_bottom_menu_tool">工具</string>
     <string name="main_bottom_menu_demo">示例</string>

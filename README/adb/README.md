@@ -33,4 +33,6 @@ adb shell wm size reset
 
 ```bash
 adb shell am broadcast -a AUTONAVI_STANDARD_BROADCAST_SEND --ei KEY_TYPE 10019 --ei EXTRA_STATE 9
+
+com.bmit.action.NAVI 
 ```

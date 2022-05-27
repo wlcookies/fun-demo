@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat;
 /**
  * PermissionUtils
  * <p>
- * <b>Check permission: </b> {@link #hasPermission(Context, String)}, {@link #hasPermission(Context, String[])}
+ * <b>Check permission: </b> {@link #hasPermission(Context, String)}, {@link #hasPermissions(Context, String[])}
  *
  * @author wg
  * @version 1.0
@@ -35,7 +35,7 @@ public class PermissionUtils {
      * @param permissions permissions group
      * @return true GRANTED, false DENIED
      */
-    public static boolean hasPermission(Context context, String[] permissions) {
+    public static boolean hasPermissions(Context context, String[] permissions) {
         for (String permission : permissions) {
             if (!hasPermission(context, permission)) {
                 return false;

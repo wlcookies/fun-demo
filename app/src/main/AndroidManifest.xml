@@ -5,20 +5,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <!--Android 6-11 定位权限-->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- Android 6-11 定位权限 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 蓝牙扫描-->
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-
-    <!--Android12 的蓝牙权限 如果您的应用与已配对的蓝牙设备通信或者获取当前手机蓝牙是否打开-->
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <!--Android12 的蓝牙权限 如果您的应用查找蓝牙设备（如蓝牙低功耗 (BLE) 外围设备）-->
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <!--Android12 的蓝牙权限 如果您的应用使当前设备可被其他蓝牙设备检测到-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 蓝牙扫描 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- Android12 的蓝牙权限 如果您的应用与已配对的蓝牙设备通信或者获取当前手机蓝牙是否打开 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" /> <!-- Android12 的蓝牙权限 如果您的应用查找蓝牙设备（如蓝牙低功耗 (BLE) 外围设备） -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- Android12 的蓝牙权限 如果您的应用使当前设备可被其他蓝牙设备检测到 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
 
     <application
@@ -32,10 +25,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fundemo"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.demo.TestMediaClientActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <provider
+            android:name=".provider.TestContentProvider"
+            android:authorities="com.wlcookies.fundemo.testcontentprovider"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
+            android:name=".ui.demo.TestContentProviderActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.demo.BluetoothActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.MyMediaService"
@@ -48,10 +56,10 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

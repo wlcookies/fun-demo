@@ -19,6 +19,8 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.wlcookies.fundemo.R;
 import com.wlcookies.fundemo.ui.demo.BluetoothActivity;
+import com.wlcookies.fundemo.ui.demo.TestContentProviderActivity;
+import com.wlcookies.fundemo.ui.demo.TestMediaClientActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +102,12 @@ public class DemoFragment extends Fragment {
         functionBeans.add(new FunctionBean(
                 2, "WIFI相关", R.drawable.ic_wifi
         ));
+        functionBeans.add(new FunctionBean(
+                3, "ContentProvider", R.drawable.ic_content_provider
+        ));
+        functionBeans.add(new FunctionBean(
+                4, "MediaClient测试", R.drawable.ic_media
+        ));
         BaseQuickAdapter<FunctionBean, BaseViewHolder> adapter = new BaseQuickAdapter<FunctionBean, BaseViewHolder>(R.layout.demo_function_list_item, functionBeans) {
             @Override
             protected void convert(@NonNull BaseViewHolder holder, FunctionBean functionBean) {
@@ -118,6 +126,12 @@ public class DemoFragment extends Fragment {
                     break;
                 case 2: // wifi相关
 
+                    break;
+                case 3: // ContentProvider
+                    startActivity(TestContentProviderActivity.newInstance(requireActivity()));
+                    break;
+                case 4: // MediaClient测试
+                    startActivity(TestMediaClientActivity.newInstance(requireActivity()));
                     break;
                 default:
                     break;
