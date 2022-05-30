@@ -4,34 +4,24 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.media2.common.MediaItem;
 import androidx.media2.common.MediaMetadata;
 import androidx.media2.common.SessionPlayer;
-import androidx.media2.common.SubtitleData;
-import androidx.media2.common.VideoSize;
 import androidx.media2.session.MediaBrowser;
 import androidx.media2.session.MediaController;
-import androidx.media2.session.MediaLibraryService;
-import androidx.media2.session.MediaSession;
 import androidx.media2.session.MediaSessionManager;
-import androidx.media2.session.SessionCommand;
 import androidx.media2.session.SessionCommandGroup;
-import androidx.media2.session.SessionResult;
 import androidx.media2.session.SessionToken;
 
-import com.google.common.util.concurrent.ListenableFuture;
-import com.wlcookies.commonmodule.utils.DateUtils;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 /**
@@ -42,8 +32,9 @@ import java.util.concurrent.Executor;
  */
 public class MediaClient {
 
+    public static boolean isDebug = false;
+
     private MediaBrowser mMediaController;
-    private static boolean isDebug = true;
     private static final String TAG = "MediaClient";
 
     private final Executor mMainExecutor;
@@ -54,6 +45,7 @@ public class MediaClient {
     public static boolean isSeeking = false;
 
     private MediaClientViewModel mMediaClientViewModel;
+
 
     public MediaClient(@NonNull Context context, @NonNull String packageName, Bundle connectionHints) {
 
@@ -74,33 +66,57 @@ public class MediaClient {
             }
             mMediaController = builder.build();
         } else {
-            log("未发现此应用中的媒体服务");
+//            log("未发现此应用中的媒体服务");
+            Log.e(TAG, "MediaClient: 未发现此应用中的媒体服务");
         }
     }
 
-
     public void updatePosition() {
-        Log.d(TAG, "当前是否拖动" + isSeeking);
         if (!isSeeking) {
+            // 正在播放的情况下，防止拖拽过程中更新位置
             setCurrentPosition((int) getCurrentPosition());
         }
-        progressHandler.postDelayed(this::updatePosition, 1000L);
+        if (getPlayerState() == SessionPlayer.PLAYER_STATE_PLAYING) {
+            progressHandler.postDelayed(this::updatePosition, 1000L);
+        } else {
+            progressHandler.removeCallbacks(this::updatePosition);
+        }
     }
 
     /**
-     * 设置数据交互视图
+     * 进度搜索
      *
-     * @param mMediaClientViewModel ViewModel
+     * @param mSeekBar 进度搜索
      */
-    public void setMediaClientViewModel(MediaClientViewModel mMediaClientViewModel) {
-        this.mMediaClientViewModel = mMediaClientViewModel;
+    public void setSeekBar(SeekBar mSeekBar) {
+        if (mSeekBar != null) {
+            mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (isSeeking) {
+                        setCurrentPosition(progress);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    isSeeking = true;
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    isSeeking = false;
+                    seekTo(seekBar.getProgress());
+                }
+            });
+        }
     }
 
     /**
      * 开始播放
      */
     public void play() {
-        if (mMediaController != null) {
+        if (mMediaController != null && getPlayerState() == SessionPlayer.PLAYER_STATE_PAUSED) {
             mMediaController.play();
         }
     }
@@ -109,7 +125,7 @@ public class MediaClient {
      * 暂停播放
      */
     public void pause() {
-        if (mMediaController != null) {
+        if (mMediaController != null && getPlayerState() == SessionPlayer.PLAYER_STATE_PLAYING) {
             mMediaController.pause();
         }
     }
@@ -149,6 +165,10 @@ public class MediaClient {
      */
     public long getCurrentPosition() {
         long position = 0;
+        Integer currentPositionValue = mMediaClientViewModel.currentPosition.getValue();
+        if (currentPositionValue != null) {
+            position = currentPositionValue;
+        }
         if (mMediaController != null && getPlayerState() == SessionPlayer.PLAYER_STATE_PLAYING) {
             position = mMediaController.getCurrentPosition();
         }
@@ -161,6 +181,7 @@ public class MediaClient {
     public void close() {
         if (mMediaController != null) {
             mMediaController.close();
+            progressHandler.removeCallbacks(this::updatePosition);
         }
     }
 
@@ -204,6 +225,19 @@ public class MediaClient {
     }
 
     /**
+     * 提供数据视图给外部使用
+     *
+     * @param viewModelStoreOwner 所有者
+     * @return MediaClientViewModel
+     */
+    public MediaClientViewModel getDataViewModel(ViewModelStoreOwner viewModelStoreOwner) {
+        if (mMediaClientViewModel == null) {
+            mMediaClientViewModel = new ViewModelProvider(viewModelStoreOwner).get(MediaClientViewModel.class);
+        }
+        return mMediaClientViewModel;
+    }
+
+    /**
      * 客户端回调信息处理
      */
     private class ControllerCallback extends MediaBrowser.BrowserCallback {
@@ -217,7 +251,6 @@ public class MediaClient {
             setPlayState(controller);
             //
             updatePosition();
-
         }
 
         @Override
@@ -225,7 +258,7 @@ public class MediaClient {
             super.onPlayerStateChanged(controller, state);
             // 设置播放状态
             setPlayState(controller);
-
+            // 更新位置进度
             updatePosition();
         }
 
@@ -239,23 +272,6 @@ public class MediaClient {
                     setCurrentMediaItem(metadata);
                 }
             }
-
-//                log("\t专辑\t" + metadata.getString(MediaMetadata.METADATA_KEY_ALBUM));
-//                log("\t专辑艺术家\t" + metadata.getString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST));
-//                log("\t媒体艺术家\t" + metadata.getString(MediaMetadata.METADATA_KEY_ARTIST));
-//                log("\t媒体创作者\t" + metadata.getString(MediaMetadata.METADATA_KEY_AUTHOR));
-//                log("\t媒体编译状态\t" + metadata.getString(MediaMetadata.METADATA_KEY_COMPILATION));
-//                log("\t媒体编写器信息\t" + metadata.getString(MediaMetadata.METADATA_KEY_COMPOSER));
-//                log("\t创建或发布日期\t" + metadata.getString(MediaMetadata.METADATA_KEY_DATE));
-//                log("\t磁盘号信息\t" + metadata.getLong(MediaMetadata.METADATA_KEY_DISC_NUMBER));
-//                log("\t描述信息\t" + metadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_DESCRIPTION));
-//                log("\t媒体类型\t" + metadata.getString(MediaMetadata.METADATA_KEY_GENRE));
-//                log("\t媒体ID\t" + metadata.getString(MediaMetadata.METADATA_KEY_MEDIA_ID));
-//                log("\t媒体Uri\t" + metadata.getString(MediaMetadata.METADATA_KEY_MEDIA_URI));
-//                log("\t曲目号\t" + metadata.getLong(MediaMetadata.METADATA_KEY_TRACK_NUMBER));
-//                log("\t媒体写入者信息\t" + metadata.getString(MediaMetadata.METADATA_KEY_WRITER));
-//                log("\t年份信息\t" + metadata.getLong(MediaMetadata.METADATA_KEY_YEAR));
-
         }
 
         @Override
@@ -323,7 +339,7 @@ public class MediaClient {
      *
      * @param object 日志信息
      */
-    public static void log(@Nullable Object object) {
+    private static void log(@Nullable Object object) {
         if (isDebug && object != null) {
             Log.d(TAG, object.toString());
         }

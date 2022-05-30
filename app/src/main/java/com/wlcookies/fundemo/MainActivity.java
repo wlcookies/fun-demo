@@ -1,35 +1,19 @@
 package com.wlcookies.fundemo;
 
-import static com.wlcookies.mediasessionmodule.MediaClient.log;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.wlcookies.fundemo.ui.DemoFragment;
 import com.wlcookies.fundemo.ui.ToolFragment;
 import com.wlcookies.fundemo.ui.WidgetFragment;
-import com.wlcookies.mediasessionmodule.MediaClient;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends BaseActivity implements NavigationBarView.OnItemSelectedListener {
 
@@ -43,12 +27,6 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
         setContentView(R.layout.activity_main);
 
         initData();
-
-
-        List<PackageInfo> installedPackages = getPackageManager().getInstalledPackages(0);
-        for (PackageInfo installedPackage : installedPackages) {
-            log(installedPackage.packageName);
-        }
     }
 
     private void initData() {
