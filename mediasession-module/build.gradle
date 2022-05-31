@@ -38,6 +38,4 @@ dependencies {
 
     // 蓝牙相关模块
     implementation project(path: ':common-module')
-
-
 }

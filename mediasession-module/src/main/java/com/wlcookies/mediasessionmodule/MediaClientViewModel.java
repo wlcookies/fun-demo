@@ -111,6 +111,4 @@ public class MediaClientViewModel extends ViewModel {
     public long getMediaDuration(@NonNull MediaMetadata mediaMetadata) {
         return mediaMetadata.getLong(MediaMetadata.METADATA_KEY_DURATION);
     }
-
-
 }

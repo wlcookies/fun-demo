@@ -18,11 +18,17 @@ import androidx.media2.common.SessionPlayer;
 import androidx.media2.session.MediaBrowser;
 import androidx.media2.session.MediaController;
 import androidx.media2.session.MediaSessionManager;
+import androidx.media2.session.SessionCommand;
 import androidx.media2.session.SessionCommandGroup;
+import androidx.media2.session.SessionResult;
 import androidx.media2.session.SessionToken;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Media2 Client
@@ -32,7 +38,7 @@ import java.util.concurrent.Executor;
  */
 public class MediaClient {
 
-    public static boolean isDebug = false;
+    public static boolean isDebug = true;
 
     private MediaBrowser mMediaController;
     private static final String TAG = "MediaClient";
@@ -45,7 +51,6 @@ public class MediaClient {
     public static boolean isSeeking = false;
 
     private MediaClientViewModel mMediaClientViewModel;
-
 
     public MediaClient(@NonNull Context context, @NonNull String packageName, Bundle connectionHints) {
 
@@ -136,7 +141,16 @@ public class MediaClient {
     public void seekTo(long position) {
         if (mMediaController != null) {
             setCurrentPosition((int) position);
-            mMediaController.seekTo(position);
+            ListenableFuture<SessionResult> seekToResult = mMediaController.seekTo(position);
+            seekToResult.addListener(() -> {
+                try {
+                    SessionResult sessionResult = seekToResult.get(3000L, TimeUnit.SECONDS);
+                    log("寻找位置 0 == " + sessionResult.getResultCode());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, mMainExecutor);
+
         }
     }
 

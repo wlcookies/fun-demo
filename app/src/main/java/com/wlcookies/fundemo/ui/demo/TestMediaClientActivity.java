@@ -2,6 +2,7 @@ package com.wlcookies.fundemo.ui.demo;
 
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,8 +35,8 @@ public class TestMediaClientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_media_client);
 
-        mediaClient = new MediaClient(this, "com.netease.cloudmusic1111", null);
-//        mediaClient = new MediaClient(this, "com.example.android.mediasession", null);
+//        mediaClient = new MediaClient(this, "com.netease.cloudmusic", null); // 网易云音乐
+        mediaClient = new MediaClient(this, "com.android.bluetooth", null); // 系统蓝牙
         MediaClientViewModel mediaClientViewModel = mediaClient.getDataViewModel(this);
 
         Button skipToPrevious = findViewById(R.id.skipToPrevious);
@@ -49,6 +50,7 @@ public class TestMediaClientActivity extends AppCompatActivity {
         TextView total = findViewById(R.id.total);
         TextView current = findViewById(R.id.current);
         seekBar = findViewById(R.id.seekBar);
+
         ShapeableImageView icon = findViewById(R.id.icon);
         mediaClient.setSeekBar(seekBar);
 
