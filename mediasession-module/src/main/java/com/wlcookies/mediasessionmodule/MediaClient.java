@@ -40,6 +40,10 @@ public class MediaClient {
 
     public static boolean isDebug = true;
 
+    public MediaBrowser getMediaController() {
+        return mMediaController;
+    }
+
     private MediaBrowser mMediaController;
     private static final String TAG = "MediaClient";
 
@@ -141,16 +145,7 @@ public class MediaClient {
     public void seekTo(long position) {
         if (mMediaController != null) {
             setCurrentPosition((int) position);
-            ListenableFuture<SessionResult> seekToResult = mMediaController.seekTo(position);
-            seekToResult.addListener(() -> {
-                try {
-                    SessionResult sessionResult = seekToResult.get(3000L, TimeUnit.SECONDS);
-                    log("寻找位置 0 == " + sessionResult.getResultCode());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }, mMainExecutor);
-
+            mMediaController.seekTo(position);
         }
     }
 

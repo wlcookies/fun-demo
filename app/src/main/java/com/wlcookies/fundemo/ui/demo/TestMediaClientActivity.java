@@ -13,6 +13,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.media2.common.MediaItem;
+import androidx.media2.common.MediaMetadata;
+import androidx.media2.common.SessionPlayer;
+import androidx.media2.session.MediaBrowser;
+import androidx.media2.session.MediaController;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.wlcookies.commonmodule.utils.DateUtils;
@@ -35,8 +40,9 @@ public class TestMediaClientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_media_client);
 
-//        mediaClient = new MediaClient(this, "com.netease.cloudmusic", null); // 网易云音乐
-        mediaClient = new MediaClient(this, "com.android.bluetooth", null); // 系统蓝牙
+        mediaClient = new MediaClient(this, "com.netease.cloudmusic", null); // 网易云音乐
+//        mediaClient = new MediaClient(this, "com.android.bluetooth", null); // 系统蓝牙
+//        mediaClient = new MediaClient(this, "com.example.android.mediasession", null); // 系统蓝牙
         MediaClientViewModel mediaClientViewModel = mediaClient.getDataViewModel(this);
 
         Button skipToPrevious = findViewById(R.id.skipToPrevious);
@@ -76,7 +82,21 @@ public class TestMediaClientActivity extends AppCompatActivity {
 
         // 连接状态
         mediaClientViewModel.connectState.observe(this, isConnected -> {
-            Log.d("wl", "onCreate: ============================= " + isConnected);
+            if (isConnected) {
+                // 连接成功
+                MediaBrowser mediaController = mediaClient.getMediaController();
+                long currentPosition = mediaController.getCurrentPosition() == SessionPlayer.UNKNOWN_TIME ? 0 : mediaController.getCurrentPosition();
+                MediaItem currentMediaItem = mediaController.getCurrentMediaItem();
+                if (currentMediaItem != null) {
+                    MediaMetadata playlistMetadata = currentMediaItem.getMetadata();
+                    if (playlistMetadata != null) {
+                        int mediaDuration = (int) mediaClientViewModel.getMediaDuration(playlistMetadata);
+                        total.setText(DateUtils.hhmm(mediaDuration));
+                        seekBar.setMax(mediaDuration);
+                        seekBar.setProgress((int) currentPosition);
+                    }
+                }
+            }
         });
 
         // 播放状态
