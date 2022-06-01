@@ -26,7 +26,7 @@
         android:theme="@style/Theme.Fundemo"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.demo.TestMediaClientActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -55,7 +55,7 @@
         </service>
 
         <activity
-            android:name=".ui.demo.TestMediaClientActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

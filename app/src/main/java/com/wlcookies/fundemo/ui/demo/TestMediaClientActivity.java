@@ -27,6 +27,7 @@ import com.wlcookies.mediasessionmodule.MediaClientViewModel;
 
 public class TestMediaClientActivity extends AppCompatActivity {
 
+    private static final String TAG = "TestMediaClientActivity";
     private MediaClient mediaClient;
     private SeekBar seekBar;
 
@@ -40,9 +41,10 @@ public class TestMediaClientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_media_client);
 
-        mediaClient = new MediaClient(this, "com.netease.cloudmusic", null); // 网易云音乐
-//        mediaClient = new MediaClient(this, "com.android.bluetooth", null); // 系统蓝牙
-//        mediaClient = new MediaClient(this, "com.example.android.mediasession", null); // 系统蓝牙
+//        mediaClient = new MediaClient(this, "com.netease.cloudmusic", null); // 网易云音乐
+        mediaClient = new MediaClient(this, "com.android.bluetooth", null); // 系统蓝牙
+//         mediaClient = new MediaClient(this, "com.example.android.mediasession", null);
+//        mediaClient = new MediaClient(this, "com.kugou.android.auto", null); // 系统蓝牙
         MediaClientViewModel mediaClientViewModel = mediaClient.getDataViewModel(this);
 
         Button skipToPrevious = findViewById(R.id.skipToPrevious);
@@ -90,8 +92,22 @@ public class TestMediaClientActivity extends AppCompatActivity {
                 if (currentMediaItem != null) {
                     MediaMetadata playlistMetadata = currentMediaItem.getMetadata();
                     if (playlistMetadata != null) {
+
+                        for (String s : playlistMetadata.keySet()) {
+                            Log.d(TAG, "keyset:  ================= " + s);
+                        }
+
                         int mediaDuration = (int) mediaClientViewModel.getMediaDuration(playlistMetadata);
                         total.setText(DateUtils.hhmm(mediaDuration));
+
+                        Bitmap mediaIcon = mediaClientViewModel.getMediaIcon(playlistMetadata);
+                        if (mediaIcon != null) {
+                            icon.setImageBitmap(mediaIcon);
+                        }
+
+                        album.setText(mediaClientViewModel.getMediaAlbum(playlistMetadata));
+                        title.setText(mediaClientViewModel.getMediaDisplayTitle(playlistMetadata));
+                        subtitle.setText(mediaClientViewModel.getMediaDisplaySubTitle(playlistMetadata));
                         seekBar.setMax(mediaDuration);
                         seekBar.setProgress((int) currentPosition);
                     }
@@ -105,13 +121,13 @@ public class TestMediaClientActivity extends AppCompatActivity {
         });
 
         mediaClientViewModel.currentMediaItem.observe(this, mediaMetadata -> {
+            Log.d(TAG, "当前歌曲——最大长度: " + (int) mediaClientViewModel.getMediaDuration(mediaMetadata));
             Bitmap mediaIcon = mediaClientViewModel.getMediaIcon(mediaMetadata);
             if (mediaIcon != null) {
                 icon.setImageBitmap(mediaIcon);
             }
             album.setText(mediaClientViewModel.getMediaAlbum(mediaMetadata));
             title.setText(mediaClientViewModel.getMediaDisplayTitle(mediaMetadata));
-            subtitle.setText(mediaClientViewModel.getMediaDisplaySubTitle(mediaMetadata));
             subtitle.setText(mediaClientViewModel.getMediaDisplaySubTitle(mediaMetadata));
             total.setText(DateUtils.hhmm((int) mediaClientViewModel.getMediaDuration(mediaMetadata)));
             // 设置最大值

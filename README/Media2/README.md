@@ -54,6 +54,8 @@
 - STATUS_DOWNLOADING
 - STATUS_NOT_DOWNLOADED
 
+
+
 - METADATA_KEY_ADVERTISEMENT
 	> **Long**，检索媒体是否是广告的信息，0：不是广告，1或非0：是广告
 
@@ -193,6 +195,3 @@
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
-
-
-        6月10号之后

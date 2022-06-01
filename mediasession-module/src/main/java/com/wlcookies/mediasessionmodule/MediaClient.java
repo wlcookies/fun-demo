@@ -26,9 +26,11 @@ import androidx.media2.session.SessionToken;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Media2 Client
@@ -145,7 +147,21 @@ public class MediaClient {
     public void seekTo(long position) {
         if (mMediaController != null) {
             setCurrentPosition((int) position);
-            mMediaController.seekTo(position);
+            log("seek to " + position);
+            log("当前播放状态 " + getPlayerState());
+            ListenableFuture<SessionResult> sessionResultListenableFuture = mMediaController.seekTo(position);
+            sessionResultListenableFuture.addListener(new Runnable() {
+                @Override
+                public void run() {
+                    SessionResult sessionResult = null;
+                    try {
+                        sessionResult = sessionResultListenableFuture.get(3000L, TimeUnit.SECONDS);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    log("xxxxxxxxx " + sessionResult.getResultCode());
+                }
+            }, mMainExecutor);
         }
     }
 
@@ -260,6 +276,17 @@ public class MediaClient {
             setPlayState(controller);
             //
             updatePosition();
+            // MediaController.fastForward() COMMAND_CODE_SESSION_FAST_FORWARD 40000
+            // MediaController.play() COMMAND_CODE_PLAYER_PLAY 10000
+            // MediaController.setVolumeTo(int, int) COMMAND_CODE_VOLUME_SET_VOLUME 30000
+            //  MediaController.rewind() COMMAND_CODE_SESSION_REWIND 40001
+            // MediaController.pause() COMMAND_CODE_PLAYER_PAUSE 10001
+            // MediaController.adjustVolume(int, int) COMMAND_CODE_VOLUME_ADJUST_VOLUME 30001
+            // MediaController.skipForward() COMMAND_CODE_SESSION_SKIP_FORWARD 40002
+            // MediaController.prepare() COMMAND_CODE_PLAYER_PREPARE 10002
+            //  MediaController.skipBackward() COMMAND_CODE_SESSION_SKIP_BACKWARD 40003
+            // MediaController.seekTo(long) COMMAND_CODE_PLAYER_SEEK_TO 10003
+            // MediaController.setRating(String, Rating) COMMAND_CODE_SESSION_SET_RATING 40010
         }
 
         @Override
@@ -278,9 +305,20 @@ public class MediaClient {
                 MediaMetadata metadata = item.getMetadata();
                 if (metadata != null) {
                     // 更新当前播放媒体
-                    setCurrentMediaItem(metadata);
+                    if (metadata.containsKey(MediaMetadata.METADATA_KEY_DURATION)) {
+                        log("是否存在时长Key ============= " + true);
+                        setCurrentMediaItem(metadata);
+                    } else {
+                        log("是否存在时长Key ============= " + false);
+                    }
+
                 }
             }
+        }
+
+        @Override
+        public void onTracksChanged(@NonNull MediaController controller, @NonNull List<SessionPlayer.TrackInfo> tracks) {
+            super.onTracksChanged(controller, tracks);
         }
 
         @Override
@@ -317,6 +355,7 @@ public class MediaClient {
         @Override
         public void onSeekCompleted(@NonNull MediaController controller, long position) {
             super.onSeekCompleted(controller, position);
+            log("onSeekCompleted =============================================== ");
         }
 
         /**
@@ -394,6 +433,7 @@ public class MediaClient {
      */
     private void setCurrentMediaItem(MediaMetadata mediaMetadata) {
         if (mMediaClientViewModel != null) {
+            log("LIB ---- 当前最大时长 " + mMediaClientViewModel.getMediaDuration(mediaMetadata));
             mMediaClientViewModel.setCurrentMediaItem(mediaMetadata);
         }
     }

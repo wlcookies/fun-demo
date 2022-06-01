@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/dp_20"
     tools:context=".ui.demo.TestMediaClientActivity">
 
     <com.google.android.material.imageview.ShapeableImageView
-
         app:shapeAppearanceOverlay="@style/roundedCornerImageStyle"
         android:id="@+id/icon"
-        android:layout_width="@dimen/dp_120"
-        android:layout_height="@dimen/dp_120"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80"
         android:layout_marginTop="@dimen/dp_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

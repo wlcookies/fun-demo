@@ -86,8 +86,9 @@ public class MediaClientViewModel extends ViewModel {
      */
     public @NonNull
     String getMediaDisplayTitle(@NonNull MediaMetadata mediaMetadata) {
-        String displayTitle = mediaMetadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE);
-        return displayTitle != null ? displayTitle : "未知";
+        String prefsTitle = mediaMetadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE);
+        String optionsTitle = mediaMetadata.getString(MediaMetadata.METADATA_KEY_TITLE);
+        return prefsTitle != null ? prefsTitle : (optionsTitle != null ? optionsTitle : "未知");
     }
 
     /**
