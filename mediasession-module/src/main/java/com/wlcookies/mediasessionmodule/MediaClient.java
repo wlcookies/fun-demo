@@ -276,17 +276,6 @@ public class MediaClient {
             setPlayState(controller);
             //
             updatePosition();
-            // MediaController.fastForward() COMMAND_CODE_SESSION_FAST_FORWARD 40000
-            // MediaController.play() COMMAND_CODE_PLAYER_PLAY 10000
-            // MediaController.setVolumeTo(int, int) COMMAND_CODE_VOLUME_SET_VOLUME 30000
-            //  MediaController.rewind() COMMAND_CODE_SESSION_REWIND 40001
-            // MediaController.pause() COMMAND_CODE_PLAYER_PAUSE 10001
-            // MediaController.adjustVolume(int, int) COMMAND_CODE_VOLUME_ADJUST_VOLUME 30001
-            // MediaController.skipForward() COMMAND_CODE_SESSION_SKIP_FORWARD 40002
-            // MediaController.prepare() COMMAND_CODE_PLAYER_PREPARE 10002
-            //  MediaController.skipBackward() COMMAND_CODE_SESSION_SKIP_BACKWARD 40003
-            // MediaController.seekTo(long) COMMAND_CODE_PLAYER_SEEK_TO 10003
-            // MediaController.setRating(String, Rating) COMMAND_CODE_SESSION_SET_RATING 40010
         }
 
         @Override

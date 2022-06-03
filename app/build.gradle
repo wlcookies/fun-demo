@@ -5,6 +5,10 @@ plugins {
 android {
     compileSdk rootProject.ext.compile_sdk_version
 
+    viewBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId rootProject.ext.applicationId
         minSdk rootProject.ext.min_sdk_version
