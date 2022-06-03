@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.wlcookies.fundemo.R;
+import com.wlcookies.fundemo.databinding.FragmentWidgetBinding;
 
 /**
  * 控件使用Demo
@@ -17,6 +18,8 @@ import com.wlcookies.fundemo.R;
  * @date 2022/5/12
  */
 public class WidgetFragment extends Fragment {
+
+    private FragmentWidgetBinding fragmentWidgetBinding;
 
     public static WidgetFragment newInstance() {
         return new WidgetFragment();
@@ -30,6 +33,13 @@ public class WidgetFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_widget, container, false);
+        fragmentWidgetBinding = FragmentWidgetBinding.inflate(inflater, container, false);
+        return fragmentWidgetBinding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        fragmentWidgetBinding = null;
     }
 }

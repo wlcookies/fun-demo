@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.wlcookies.fundemo.databinding.ActivityMainBinding;
 import com.wlcookies.fundemo.ui.DemoFragment;
 import com.wlcookies.fundemo.ui.ToolFragment;
 import com.wlcookies.fundemo.ui.WidgetFragment;
@@ -19,20 +19,21 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private BottomNavigationView mBottomNav;
+    private ActivityMainBinding activityMainBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(activityMainBinding.getRoot());
 
         initData();
     }
 
     private void initData() {
-        mBottomNav = findViewById(R.id.main_bottom_nav_view);
-        mBottomNav.setOnItemSelectedListener(this);
-        mBottomNav.setSelectedItemId(R.id.menu_widgets);
+        activityMainBinding.mainBottomNavView.setOnItemSelectedListener(this);
+        activityMainBinding.mainBottomNavView.setSelectedItemId(R.id.menu_widgets);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -52,5 +53,11 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
                 return true;
         }
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        activityMainBinding = null;
     }
 }

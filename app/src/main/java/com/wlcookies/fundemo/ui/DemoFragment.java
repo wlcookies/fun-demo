@@ -1,30 +1,23 @@
 package com.wlcookies.fundemo.ui;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.wlcookies.fundemo.R;
-import com.wlcookies.fundemo.ui.demo.BluetoothActivity;
-import com.wlcookies.fundemo.ui.demo.TestContentProviderActivity;
-import com.wlcookies.fundemo.ui.demo.TestMediaClientActivity;
+import com.wlcookies.fundemo.databinding.FragmentDemoBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -83,17 +76,19 @@ public class DemoFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    private FragmentDemoBinding fragmentDemoBinding;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_demo, container, false);
+        fragmentDemoBinding = FragmentDemoBinding.inflate(inflater, container, false);
+
+        return fragmentDemoBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        RecyclerView functionRv = view.findViewById(R.id.function_rv);
 
         List<FunctionBean> functionBeans = new ArrayList<>();
         functionBeans.add(new FunctionBean(
@@ -115,27 +110,29 @@ public class DemoFragment extends Fragment {
                 holder.setImageDrawable(R.id.icon_iv, ContextCompat.getDrawable(requireActivity(), functionBean.getIcon()));
             }
         };
-        functionRv.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
-        functionRv.setAdapter(adapter);
+        fragmentDemoBinding.functionRv.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
+        fragmentDemoBinding.functionRv.setAdapter(adapter);
 
         adapter.setOnItemClickListener((a, v, position) -> {
             FunctionBean functionBean = functionBeans.get(position);
             switch (functionBean.id) {
                 case 1: // 蓝牙相关
-                    startActivity(BluetoothActivity.newInstance(requireActivity()));
                     break;
                 case 2: // wifi相关
-
                     break;
                 case 3: // ContentProvider
-                    startActivity(TestContentProviderActivity.newInstance(requireActivity()));
                     break;
                 case 4: // MediaClient测试
-                    startActivity(TestMediaClientActivity.newInstance(requireActivity()));
                     break;
                 default:
                     break;
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        fragmentDemoBinding = null;
     }
 }

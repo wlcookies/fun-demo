@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wlcookies.fundemo.R;
+import com.wlcookies.fundemo.databinding.FragmentToolBinding;
 
 /**
  * 工具
@@ -19,6 +20,7 @@ import com.wlcookies.fundemo.R;
  */
 public class ToolFragment extends Fragment {
 
+    private FragmentToolBinding fragmentToolBinding;
 
     public static ToolFragment newInstance() {
         return new ToolFragment();
@@ -32,6 +34,14 @@ public class ToolFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tool, container, false);
+        fragmentToolBinding = FragmentToolBinding.inflate(inflater, container, false);
+
+        return fragmentToolBinding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        fragmentToolBinding = null;
     }
 }

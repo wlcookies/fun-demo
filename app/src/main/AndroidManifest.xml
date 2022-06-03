@@ -25,34 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fundemo"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.demo.TestMediaClientActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <provider
-            android:name=".provider.TestContentProvider"
-            android:authorities="com.wlcookies.fundemo.testcontentprovider"
-            android:enabled="true"
-            android:exported="true" />
-
-        <activity
-            android:name=".ui.demo.TestContentProviderActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.demo.BluetoothActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <service
-            android:name=".service.MyMediaService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="androidx.media2.session.MediaSessionService" />
-            </intent-filter>
-        </service>
 
         <activity
             android:name=".MainActivity"
