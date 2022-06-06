@@ -18,7 +18,6 @@ import androidx.media2.common.SessionPlayer;
 import androidx.media2.session.MediaBrowser;
 import androidx.media2.session.MediaController;
 import androidx.media2.session.MediaSessionManager;
-import androidx.media2.session.SessionCommand;
 import androidx.media2.session.SessionCommandGroup;
 import androidx.media2.session.SessionResult;
 import androidx.media2.session.SessionToken;
@@ -26,11 +25,8 @@ import androidx.media2.session.SessionToken;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Media2 Client
@@ -69,9 +65,11 @@ public class MediaClient {
         SessionToken availableToken = getAvailableToken(packageName);
 
         if (availableToken != null) {
+
             MediaBrowser.Builder builder = new MediaBrowser.Builder(context)
                     .setControllerCallback(mMainExecutor, new ControllerCallback())
                     .setSessionToken(availableToken);
+
             if (connectionHints != null) {
                 builder.setConnectionHints(connectionHints);
             }

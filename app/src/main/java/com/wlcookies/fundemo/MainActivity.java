@@ -3,17 +3,21 @@ package com.wlcookies.fundemo;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.wlcookies.fundemo.databinding.ActivityMainBinding;
 import com.wlcookies.fundemo.ui.DemoFragment;
 import com.wlcookies.fundemo.ui.ToolFragment;
 import com.wlcookies.fundemo.ui.WidgetFragment;
+import com.wlcookies.mediasessionmodule.MediaClient;
+import com.wlcookies.mediasessionmodule.MediaClientViewModel;
 
 public class MainActivity extends BaseActivity implements NavigationBarView.OnItemSelectedListener {
 

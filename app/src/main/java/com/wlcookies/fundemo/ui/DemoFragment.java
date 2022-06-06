@@ -9,12 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.wlcookies.fundemo.R;
 import com.wlcookies.fundemo.databinding.FragmentDemoBinding;
+import com.wlcookies.fundemo.ui.bluetooth.BluetoothMusicActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +105,9 @@ public class DemoFragment extends Fragment {
         functionBeans.add(new FunctionBean(
                 4, "MediaClient测试", R.drawable.ic_media
         ));
+        functionBeans.add(new FunctionBean(
+                5, "蓝牙音乐", R.drawable.ic_bluetooth
+        ));
         BaseQuickAdapter<FunctionBean, BaseViewHolder> adapter = new BaseQuickAdapter<FunctionBean, BaseViewHolder>(R.layout.demo_function_list_item, functionBeans) {
             @Override
             protected void convert(@NonNull BaseViewHolder holder, FunctionBean functionBean) {
@@ -123,6 +128,9 @@ public class DemoFragment extends Fragment {
                 case 3: // ContentProvider
                     break;
                 case 4: // MediaClient测试
+                    break;
+                case 5: // 蓝牙音乐
+                    startActivity(BluetoothMusicActivity.newInstance(requireActivity()));
                     break;
                 default:
                     break;
