@@ -145,21 +145,7 @@ public class MediaClient {
     public void seekTo(long position) {
         if (mMediaController != null) {
             setCurrentPosition((int) position);
-            log("seek to " + position);
-            log("当前播放状态 " + getPlayerState());
-            ListenableFuture<SessionResult> sessionResultListenableFuture = mMediaController.seekTo(position);
-            sessionResultListenableFuture.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    SessionResult sessionResult = null;
-                    try {
-                        sessionResult = sessionResultListenableFuture.get(3000L, TimeUnit.SECONDS);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    log("xxxxxxxxx " + sessionResult.getResultCode());
-                }
-            }, mMainExecutor);
+            mMediaController.seekTo(position);
         }
     }
 

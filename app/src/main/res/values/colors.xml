@@ -12,4 +12,6 @@
 
     <color name="main">#03A9F4</color>
 
+    <color name="bluetooth_music_container_bg">#FFF1F1F1</color>
+
 </resources>

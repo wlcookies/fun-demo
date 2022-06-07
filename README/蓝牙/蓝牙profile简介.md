@@ -96,4 +96,3 @@ GATT使用场景: 智能穿戴设备，手环，汽车，家用电子等
 ## SPP
 
 - Serial Port Profile 串口配置协议, 定义了如何设置虚拟串行端口及如何连接两个 Bluetooth 设备
-

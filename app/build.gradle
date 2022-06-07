@@ -19,9 +19,30 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("${getRootDir()}\\android_aosp.jks")
+            storePassword 'bmi2021'
+            keyAlias 'aosp'
+            keyPassword 'bmi2021'
+        }
+
+        release {
+            storeFile file("${getRootDir()}\\android_aosp.jks")
+            storePassword 'bmi2021'
+            keyAlias 'aosp'
+            keyPassword 'bmi2021'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
