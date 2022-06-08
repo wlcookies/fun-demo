@@ -1,16 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bluetooth_music_container_bg"
     tools:context=".ui.bluetooth.BluetoothMusicFragment">
 
+    <TextView
+        android:id="@+id/current_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:text="@string/play_time_default"
+        android:textColor="#FF000000"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintBottom_toBottomOf="@+id/total_time_tv"
+        app:layout_constraintEnd_toStartOf="@+id/right_slash_tv"
+        app:layout_constraintTop_toTopOf="@+id/total_time_tv" />
+
+    <TextView
+        android:id="@+id/right_slash_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_4"
+        android:layout_marginRight="@dimen/dp_4"
+        android:text="@string/right_slash"
+        android:textColor="#FF000000"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintBottom_toBottomOf="@+id/total_time_tv"
+        app:layout_constraintEnd_toStartOf="@+id/total_time_tv"
+        app:layout_constraintTop_toTopOf="@+id/total_time_tv" />
+
+    <TextView
+        android:id="@+id/total_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:text="@string/play_time_default"
+        android:textColor="#FF000000"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintBottom_toTopOf="@+id/progress_sb"
+        app:layout_constraintEnd_toEndOf="@+id/progress_sb" />
+
+    <com.wlcookies.fundemo.ui.bluetooth.UnableDragSeekBar
+        android:id="@+id/progress_sb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_105"
+        android:layout_marginRight="@dimen/dp_105"
+        android:layout_marginBottom="@dimen/dp_53"
+        android:background="@null"
+        android:maxHeight="@dimen/dp_6"
+        android:paddingStart="@dimen/dp_0"
+        android:paddingEnd="@dimen/dp_0"
+        android:progressDrawable="@drawable/play_progress_horizontal"
+        android:splitTrack="true"
+        android:thumb="@null"
+        app:layout_constraintBottom_toTopOf="@id/play_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/test_iv"
-        android:layout_width="@dimen/dp_100"
-        android:layout_height="@dimen/dp_100"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_media" />
-</FrameLayout>
+        android:id="@+id/play_iv"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_70"
+        android:layout_marginBottom="@dimen/dp_149"
+        android:contentDescription="@string/music_play"
+        android:src="@drawable/ic_bluetooth_music_play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/prev_iv"
+        android:layout_width="@dimen/dp_36"
+        android:layout_height="@dimen/dp_36"
+        android:layout_marginEnd="@dimen/dp_200"
+        android:contentDescription="@string/music_prev"
+        android:src="@drawable/ic_bluetooth_music_prev"
+        app:layout_constraintBottom_toBottomOf="@+id/play_iv"
+        app:layout_constraintEnd_toStartOf="@+id/play_iv"
+        app:layout_constraintTop_toTopOf="@+id/play_iv" />
+
+    <ImageView
+        android:id="@+id/next_iv"
+        android:layout_width="@dimen/dp_36"
+        android:layout_height="@dimen/dp_36"
+        android:layout_marginStart="@dimen/dp_200"
+        android:contentDescription="@string/music_next"
+        android:src="@drawable/ic_bluetooth_music_next"
+        app:layout_constraintBottom_toBottomOf="@+id/play_iv"
+        app:layout_constraintStart_toEndOf="@+id/play_iv"
+        app:layout_constraintTop_toTopOf="@+id/play_iv" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

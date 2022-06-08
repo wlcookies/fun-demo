@@ -19,14 +19,10 @@ import androidx.media2.session.MediaBrowser;
 import androidx.media2.session.MediaController;
 import androidx.media2.session.MediaSessionManager;
 import androidx.media2.session.SessionCommandGroup;
-import androidx.media2.session.SessionResult;
 import androidx.media2.session.SessionToken;
-
-import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Media2 Client
@@ -38,6 +34,8 @@ public class MediaClient {
 
     public static boolean isDebug = true;
 
+    public boolean initMediaBrowserResult = false;
+
     public MediaBrowser getMediaController() {
         return mMediaController;
     }
@@ -45,7 +43,6 @@ public class MediaClient {
     private MediaBrowser mMediaController;
     private static final String TAG = "MediaClient";
 
-    private final Executor mMainExecutor;
     private final Context mContext;
     private final MediaSessionManager mMediaSessionManager;
 
@@ -58,14 +55,13 @@ public class MediaClient {
 
         this.mContext = context;
 
-        mMainExecutor = ContextCompat.getMainExecutor(context);
+        Executor mMainExecutor = ContextCompat.getMainExecutor(context);
 
         mMediaSessionManager = MediaSessionManager.getInstance(mContext);
 
         SessionToken availableToken = getAvailableToken(packageName);
 
         if (availableToken != null) {
-
             MediaBrowser.Builder builder = new MediaBrowser.Builder(context)
                     .setControllerCallback(mMainExecutor, new ControllerCallback())
                     .setSessionToken(availableToken);
@@ -74,9 +70,11 @@ public class MediaClient {
                 builder.setConnectionHints(connectionHints);
             }
             mMediaController = builder.build();
+            initMediaBrowserResult = true;
         } else {
 //            log("未发现此应用中的媒体服务");
             Log.e(TAG, "MediaClient: 未发现此应用中的媒体服务");
+            initMediaBrowserResult = false;
         }
     }
 
@@ -243,6 +241,7 @@ public class MediaClient {
         if (mMediaClientViewModel == null) {
             mMediaClientViewModel = new ViewModelProvider(viewModelStoreOwner).get(MediaClientViewModel.class);
         }
+        mMediaClientViewModel.setInitMediaBrowserResult(initMediaBrowserResult);
         return mMediaClientViewModel;
     }
 

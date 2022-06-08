@@ -15,6 +15,17 @@ import androidx.media2.common.MediaMetadata;
 public class MediaClientViewModel extends ViewModel {
 
     /**
+     * 初始化组件的结果
+     */
+    private final MutableLiveData<Boolean> _initMediaBrowserResult = new MutableLiveData<>();
+    public LiveData<Boolean> initMediaBrowserResult = _initMediaBrowserResult;
+
+    public void setInitMediaBrowserResult(boolean result) {
+        _initMediaBrowserResult.setValue(result);
+    }
+
+
+    /**
      * 播放状态
      */
     private final MutableLiveData<Integer> _playState = new MutableLiveData<>();

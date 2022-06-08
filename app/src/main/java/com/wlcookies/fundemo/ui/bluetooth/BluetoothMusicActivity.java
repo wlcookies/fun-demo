@@ -111,7 +111,12 @@ public class BluetoothMusicActivity extends AppCompatActivity {
         mA2dpConnectionStateReceiver = null;
     }
 
-    private void a2dpStateChange(int a2dpState) {
+    /**
+     * 根据状态切换界面
+     *
+     * @param a2dpState a2dp sink 端连接状态
+     */
+    public void a2dpStateChange(int a2dpState) {
         try {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             if (a2dpState == BluetoothA2dp.STATE_CONNECTED) {

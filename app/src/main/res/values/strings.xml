@@ -7,5 +7,11 @@
     <string name="start_scan_bluetooth">开启扫描</string>
     <string name="stop_start_bluetooth">停止扫描</string>
 
+    <!--蓝牙音乐-->
     <string name="add_device">添加设备</string>
+    <string name="music_play">播放</string>
+    <string name="music_prev">上一曲</string>
+    <string name="music_next">下一曲</string>
+    <string name="right_slash">/</string>
+    <string name="play_time_default">00:00</string>
 </resources>
