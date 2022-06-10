@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.wlcookies.fundemo.R;
 import com.wlcookies.fundemo.databinding.FragmentDemoBinding;
 import com.wlcookies.fundemo.ui.bluetooth.BluetoothMusicActivity;
+import com.wlcookies.fundemo.ui.yunting.YunTingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +109,9 @@ public class DemoFragment extends Fragment {
         functionBeans.add(new FunctionBean(
                 5, "蓝牙音乐", R.drawable.ic_bluetooth
         ));
+        functionBeans.add(new FunctionBean(
+                6, "云听测试", R.drawable.ic_content_provider
+        ));
         BaseQuickAdapter<FunctionBean, BaseViewHolder> adapter = new BaseQuickAdapter<FunctionBean, BaseViewHolder>(R.layout.demo_function_list_item, functionBeans) {
             @Override
             protected void convert(@NonNull BaseViewHolder holder, FunctionBean functionBean) {
@@ -131,6 +135,9 @@ public class DemoFragment extends Fragment {
                     break;
                 case 5: // 蓝牙音乐
                     startActivity(BluetoothMusicActivity.newInstance(requireActivity()));
+                    break;
+                case 6: // 云听测试
+                    startActivity(YunTingActivity.newInstance(requireActivity()));
                     break;
                 default:
                     break;

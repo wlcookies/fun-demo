@@ -33,4 +33,10 @@ ext {
     BaseRecyclerViewAdapterHelper_version = "3.0.7"
     // recyclerview
     recyclerview_version = "1.2.1"
+
+    // lifecycle
+    lifecycle_version = "2.4.1"
+
+    // GSON
+    gson_version = "2.7"
 }

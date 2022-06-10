@@ -24,7 +24,6 @@ public class MediaClientViewModel extends ViewModel {
         _initMediaBrowserResult.setValue(result);
     }
 
-
     /**
      * 播放状态
      */
@@ -64,7 +63,6 @@ public class MediaClientViewModel extends ViewModel {
     public void setCurrentPosition(int position) {
         _currentPosition.setValue(position);
     }
-
 
     /**
      * 获取当前媒体ICON

@@ -1,40 +1,19 @@
 package com.wlcookies.fundemo.ui.bluetooth;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.job.JobScheduler;
-import android.app.job.JobService;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 
-import com.google.android.material.checkbox.MaterialCheckBox;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.wlcookies.fundemo.R;
-import com.wlcookies.mediasessionmodule.MediaClient;
-
-import java.util.Map;
 
 /**
  * 蓝牙音乐
@@ -54,15 +33,6 @@ public class BluetoothMusicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_music);
-
-        MaterialCheckBox checkBox = findViewById(R.id.test_cb);
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                a2dpStateChange(BluetoothA2dp.STATE_CONNECTED);
-            } else {
-                a2dpStateChange(BluetoothA2dp.STATE_DISCONNECTED);
-            }
-        });
 
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();

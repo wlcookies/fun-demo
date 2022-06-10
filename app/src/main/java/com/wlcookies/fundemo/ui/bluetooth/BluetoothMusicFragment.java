@@ -1,29 +1,25 @@
 package com.wlcookies.fundemo.ui.bluetooth;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothA2dp;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.media2.common.MediaItem;
 import androidx.media2.common.MediaMetadata;
 import androidx.media2.common.SessionPlayer;
 import androidx.media2.session.MediaBrowser;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.wlcookies.commonmodule.utils.DateUtils;
 import com.wlcookies.commonmodule.utils.SafetyUtils;
@@ -38,17 +34,18 @@ public class BluetoothMusicFragment extends Fragment {
 
     private static final String TAG = "BluetoothMusicFragment";
 
-    private Animation rotateAnimation;
+    private ObjectAnimator rotationAnimator;
     private UnableDragSeekBar mSeekBar;
     private TextView mCurrentTimeTv;
     private TextView mTotalTimeTv;
+    private TextView mMusicTitleTv;
     private ImageView mPlayIv;
-    private ImageView mPrevIv;
-    private ImageView mNextIv;
+
     private MediaClient mMediaClient;
 
     private boolean isPlaying = false; // 是否播放
     private int mediaDuration = 0; // 当前媒体播放时长
+
 
     public static BluetoothMusicFragment newInstance() {
         return new BluetoothMusicFragment();
@@ -65,14 +62,14 @@ public class BluetoothMusicFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 旋转动画
-        rotateAnimation = AnimationUtils.loadAnimation(requireActivity(), R.anim.anim_bluetooth_music_icon_rotate);
         mSeekBar = view.findViewById(R.id.progress_sb);
         mCurrentTimeTv = view.findViewById(R.id.current_time_tv);
         mTotalTimeTv = view.findViewById(R.id.total_time_tv);
         mPlayIv = view.findViewById(R.id.play_iv);
-        mPrevIv = view.findViewById(R.id.prev_iv);
-        mNextIv = view.findViewById(R.id.next_iv);
+        ImageView mPrevIv = view.findViewById(R.id.prev_iv);
+        ImageView mNextIv = view.findViewById(R.id.next_iv);
+        ImageView mMusicIconIv = view.findViewById(R.id.music_icon_iv);
+        mMusicTitleTv = view.findViewById(R.id.music_title_tv);
 
         mSeekBar.setTouch(false); // 设置不可拖拽
 
@@ -80,11 +77,15 @@ public class BluetoothMusicFragment extends Fragment {
         MediaClientViewModel dataViewModel = mMediaClient.getDataViewModel(this);
         mMediaClient.setSeekBar(mSeekBar);
 
+        // 旋转动画
+        rotationAnimator = ObjectAnimator.ofFloat(mMusicIconIv, "rotation", 0f, 360.0f);
+        rotationAnimator.setDuration(18000);
+        rotationAnimator.setInterpolator(new LinearInterpolator());//不停顿
+        rotationAnimator.setRepeatCount(-1);//设置动画重复次数
+        rotationAnimator.setRepeatMode(ValueAnimator.RESTART);//动画重复模式
+
         // 播放或暂停
         mPlayIv.setOnClickListener(v -> {
-
-            jumpToAddDevice();
-
             if (mMediaClient != null) {
                 if (isPlaying) {
                     mMediaClient.pause();
@@ -110,20 +111,33 @@ public class BluetoothMusicFragment extends Fragment {
         // 组件初始化结果
         dataViewModel.initMediaBrowserResult.observe(getViewLifecycleOwner(), result -> {
             // 没有找到对应MediaSession服务
-            Log.d(TAG, "组件初始化结果: " + result);
+            if (!result) {
+                jumpToAddDevice();
+            }
         });
         // 播放状态
         dataViewModel.playState.observe(getViewLifecycleOwner(), playState -> {
-            Log.d(TAG, "播放状态 === " + playState);
             // 是否在播放
             isPlaying = playState == SessionPlayer.PLAYER_STATE_PLAYING;
             mPlayIv.setImageDrawable(isPlaying ?
-                    ResourcesCompat.getDrawable(getResources(), R.drawable.ic_bluetooth_music_next, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.ic_bluetooth_music_play, null));
+                    ResourcesCompat.getDrawable(getResources(), R.drawable.ic_bluetooth_music_pause, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.ic_bluetooth_music_play, null));
+            if (isPlaying) {
+                if (rotationAnimator.isStarted()) {
+                    if (rotationAnimator.isPaused()) {
+                        rotationAnimator.resume();
+                    }
+                } else {
+                    rotationAnimator.start();
+                }
+            } else {
+                if (rotationAnimator.isStarted()) {
+                    rotationAnimator.pause();
+                }
+            }
         });
 
         // 连接状态
         dataViewModel.connectState.observe(getViewLifecycleOwner(), isConnected -> {
-            Log.d(TAG, "连接状态 === " + isConnected);
             if (isConnected) {
                 // 初始化媒体
                 if (mMediaClient != null) {
@@ -157,7 +171,6 @@ public class BluetoothMusicFragment extends Fragment {
 
         // 当前播放媒体
         dataViewModel.currentMediaItem.observe(getViewLifecycleOwner(), mediaMetadata -> {
-            Log.d(TAG, "当前播放媒体 " + dataViewModel.getMediaDisplayTitle(mediaMetadata));
 
             mediaDuration = (int) dataViewModel.getMediaDuration(mediaMetadata);
             mSeekBar.setMax(mediaDuration);
@@ -168,7 +181,6 @@ public class BluetoothMusicFragment extends Fragment {
 
         // 当前位置
         dataViewModel.currentPosition.observe(getViewLifecycleOwner(), progress -> {
-            Log.d(TAG, "当前播放进度 " + progress);
             if (!MediaClient.isSeeking) {
                 mSeekBar.setProgress(progress);
             }
@@ -182,6 +194,9 @@ public class BluetoothMusicFragment extends Fragment {
         });
     }
 
+    /**
+     * 跳转到添加设备页面
+     */
     private void jumpToAddDevice() {
         try {
             BluetoothMusicActivity bluetoothMusicActivity = (BluetoothMusicActivity) getActivity();
@@ -198,35 +213,39 @@ public class BluetoothMusicFragment extends Fragment {
      *
      * @param metadata 媒体数据
      */
+    @SuppressLint("SetTextI18n")
     private void updateMediaMetadata(MediaMetadata metadata) {
         if (metadata != null) {
+
             String keyTitle = SafetyUtils.getString(metadata.getString(MediaMetadata.METADATA_KEY_TITLE));
             String keyArtist = SafetyUtils.getString(metadata.getString(MediaMetadata.METADATA_KEY_ARTIST));
-            String keyAlbum = SafetyUtils.getString(metadata.getString(MediaMetadata.METADATA_KEY_ALBUM));
-            String keyGenre = SafetyUtils.getString(metadata.getString(MediaMetadata.METADATA_KEY_GENRE));
+//            String keyAlbum = SafetyUtils.getString(metadata.getString(MediaMetadata.METADATA_KEY_ALBUM));
+//            String keyGenre = SafetyUtils.getString(metadata.getString(MediaMetadata.METADATA_KEY_GENRE));
 
-            Log.d(TAG, "METADATA_KEY_TITLE: " + keyTitle);
-            Log.d(TAG, "METADATA_KEY_ARTIST: " + keyArtist);
-            Log.d(TAG, "METADATA_KEY_ALBUM: " + keyAlbum);
-            Log.d(TAG, "METADATA_KEY_GENRE: " + keyGenre);
+            mMusicTitleTv.setText((!"".equals(keyTitle) ? keyTitle : "未知歌曲") + "  - " + (!"".equals(keyArtist) ? keyArtist : "未知歌手"));
 
-            Log.d(TAG, "METADATA_KEY_DURATION: " + metadata.getLong(MediaMetadata.METADATA_KEY_DURATION));
-            Log.d(TAG, "METADATA_KEY_TRACK_NUMBER: " + metadata.getLong(MediaMetadata.METADATA_KEY_TRACK_NUMBER));
-            Log.d(TAG, "METADATA_KEY_NUM_TRACKS: " + metadata.getLong(MediaMetadata.METADATA_KEY_NUM_TRACKS));
-
-            Log.d(TAG, "start --- 支持的所有====================================KEY");
-            for (String s : metadata.keySet()) {
-                Log.d(TAG, s);
-            }
-            Log.d(TAG, "end --- 支持的所有====================================KEY");
+//            Log.d(TAG, "METADATA_KEY_TITLE: " + keyTitle);
+//            Log.d(TAG, "METADATA_KEY_ARTIST: " + keyArtist);
+//            Log.d(TAG, "METADATA_KEY_ALBUM: " + keyAlbum);
+//            Log.d(TAG, "METADATA_KEY_GENRE: " + keyGenre);
+//
+//            Log.d(TAG, "METADATA_KEY_DURATION: " + metadata.getLong(MediaMetadata.METADATA_KEY_DURATION));
+//            Log.d(TAG, "METADATA_KEY_TRACK_NUMBER: " + metadata.getLong(MediaMetadata.METADATA_KEY_TRACK_NUMBER));
+//            Log.d(TAG, "METADATA_KEY_NUM_TRACKS: " + metadata.getLong(MediaMetadata.METADATA_KEY_NUM_TRACKS));
+//
+//            Log.d(TAG, "start --- 支持的所有====================================KEY");
+//            for (String s : metadata.keySet()) {
+//                Log.d(TAG, s);
+//            }
+//            Log.d(TAG, "end --- 支持的所有====================================KEY");
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (rotateAnimation != null) {
-            rotateAnimation.cancel();
+        if (rotationAnimator != null) {
+            rotationAnimator.cancel();
         }
         if (mMediaClient != null) {
             mMediaClient.close();

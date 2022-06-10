@@ -32,7 +32,7 @@ adb shell wm size reset
 - [-f <FLAGS>] [<URI>]
 
 ```bash
-adb shell am broadcast -a android.bluetooth.a2dp-sink.profile.action.CONNECTION_STATE_CHANGED --ei android.bluetooth.profile.extra.STATE 3
+adb shell am broadcast -a android.bluetooth.adapter.action.STATE_CHANGED --ei android.bluetooth.adapter.extra.STATE 3
 
 adb shell am start -a com.bmi.launcher/.ui.activity.MainActivity
 

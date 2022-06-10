@@ -14,4 +14,8 @@
     <string name="music_next">下一曲</string>
     <string name="right_slash">/</string>
     <string name="play_time_default">00:00</string>
+    <string name="music_icon">音乐图标</string>
+    <string name="m_g_music">咪咕音乐</string>
+    <string name="bluetooth_music">蓝牙音乐</string>
+    <string name="usb_music">USB音乐</string>
 </resources>

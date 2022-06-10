@@ -171,15 +171,16 @@ public class MediaClient {
      * 当前播放位置
      */
     public long getCurrentPosition() {
-        long position = 0;
-        Integer currentPositionValue = mMediaClientViewModel.currentPosition.getValue();
-        if (currentPositionValue != null) {
-            position = currentPositionValue;
-        }
-        if (mMediaController != null && getPlayerState() == SessionPlayer.PLAYER_STATE_PLAYING) {
-            position = mMediaController.getCurrentPosition();
-        }
-        return position;
+//        long position = 0;
+//        Integer currentPositionValue = mMediaClientViewModel.currentPosition.getValue();
+//        if (currentPositionValue != null) {
+//            position = currentPositionValue;
+//        }
+//        if (mMediaController != null && getPlayerState() == SessionPlayer.PLAYER_STATE_PLAYING) {
+//            position = mMediaController.getCurrentPosition();
+//        }
+//        return position;
+        return mMediaController.getCurrentPosition();
     }
 
     /**
@@ -278,12 +279,8 @@ public class MediaClient {
                 if (metadata != null) {
                     // 更新当前播放媒体
                     if (metadata.containsKey(MediaMetadata.METADATA_KEY_DURATION)) {
-                        log("是否存在时长Key ============= " + true);
                         setCurrentMediaItem(metadata);
-                    } else {
-                        log("是否存在时长Key ============= " + false);
                     }
-
                 }
             }
         }
@@ -327,7 +324,6 @@ public class MediaClient {
         @Override
         public void onSeekCompleted(@NonNull MediaController controller, long position) {
             super.onSeekCompleted(controller, position);
-            log("onSeekCompleted =============================================== ");
         }
 
         /**
@@ -405,7 +401,6 @@ public class MediaClient {
      */
     private void setCurrentMediaItem(MediaMetadata mediaMetadata) {
         if (mMediaClientViewModel != null) {
-            log("LIB ---- 当前最大时长 " + mMediaClientViewModel.getMediaDuration(mediaMetadata));
             mMediaClientViewModel.setCurrentMediaItem(mediaMetadata);
         }
     }

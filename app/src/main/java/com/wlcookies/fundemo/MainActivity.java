@@ -12,10 +12,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 
 import com.google.android.material.navigation.NavigationBarView;
+import com.wlcookies.bluetoothcommonmodule.livedata.BluetoothStateLiveData;
 import com.wlcookies.fundemo.databinding.ActivityMainBinding;
 import com.wlcookies.fundemo.ui.DemoFragment;
 import com.wlcookies.fundemo.ui.ToolFragment;
 import com.wlcookies.fundemo.ui.WidgetFragment;
+import com.wlcookies.fundemo.utils.ToastUtils;
 import com.wlcookies.mediasessionmodule.MediaClient;
 import com.wlcookies.mediasessionmodule.MediaClientViewModel;
 
