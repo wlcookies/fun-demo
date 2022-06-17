@@ -1,21 +1,19 @@
 package com.wlcookies.fundemo.ui.yunting;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.kaolafm.sdk.client.ErrorInfo;
-import com.kaolafm.sdk.client.IServiceConnection;
 import com.kaolafm.sdk.client.KLClientAPI;
 import com.kaolafm.sdk.client.Music;
 import com.kaolafm.sdk.client.PlayState;
 import com.kaolafm.sdk.client.PlayStateListener;
+import com.wlcookies.commonmodule.utils.LogUtils;
 import com.wlcookies.commonmodule.utils.SafetyUtils;
 import com.wlcookies.fundemo.R;
 
@@ -23,8 +21,6 @@ import com.wlcookies.fundemo.R;
  * 云听SDK测试
  */
 public class YunTingActivity extends AppCompatActivity {
-
-    private static final String TAG = "YunTingActivity";
 
     public static Intent newInstance(Context context) {
         return new Intent(context, YunTingActivity.class);
@@ -37,59 +33,68 @@ public class YunTingActivity extends AppCompatActivity {
 
         ImageView iconIv = findViewById(R.id.icon_iv);
 
+        Music currentMusicInfo = KLClientAPI.getInstance().getCurrentMusicInfo();
+        LogUtils.d("当前播放： " + currentMusicInfo);
+
+        String playStateName = KLClientAPI.getInstance().getPlayState().name();
+        LogUtils.d("当前播放状态： " + playStateName);
+
         KLClientAPI.getInstance().setPlayListener(new PlayStateListener() {
+
             @Override
             public void onStartPrepare(Music music) {
-                Log.d(TAG, "准备开始播放: " + SafetyUtils.getString(music.albumName));
+                LogUtils.d("准备开始播放:  " + SafetyUtils.getString(music.albumName));
             }
 
             @Override
             public void onPlaying(Music music) {
-                Log.d(TAG, "onPlaying：------------------------------");
-                Log.d(TAG, SafetyUtils.getString(music.albumName));
-                Log.d(TAG, SafetyUtils.getString(music.audioName));
-                Log.d(TAG, SafetyUtils.getString(music.authorName));
-                Log.d(TAG, SafetyUtils.getString(music.categoryName));
-                Log.d(TAG, "onPlaying：------------------------------");
+                if (music != null) {
+                    LogUtils.d("onPlaying：------------------------------");
+                    LogUtils.d(SafetyUtils.getString(music.albumName));
+                    LogUtils.d(SafetyUtils.getString(music.audioName));
+                    LogUtils.d(SafetyUtils.getString(music.authorName));
+                    LogUtils.d(SafetyUtils.getString(music.categoryName));
+                    LogUtils.d("onPlaying：------------------------------");
+                }
             }
 
             @Override
             public void onProgress(Music music, long l) {
-                Log.d(TAG, "播放进度：: " + l);
+                LogUtils.d("播放进度：: " + l);
             }
 
             @Override
             public void onPause(Music music) {
-                Log.d(TAG, "onPause：------------------------------");
-                Log.d(TAG, SafetyUtils.getString(music.albumName));
-                Log.d(TAG, SafetyUtils.getString(music.audioName));
-                Log.d(TAG, SafetyUtils.getString(music.authorName));
-                Log.d(TAG, SafetyUtils.getString(music.categoryName));
-                Log.d(TAG, "onPause：------------------------------");
+                if (music != null) {
+                    LogUtils.d("onPause：------------------------------");
+                    LogUtils.d(SafetyUtils.getString(music.albumName));
+                    LogUtils.d(SafetyUtils.getString(music.audioName));
+                    LogUtils.d(SafetyUtils.getString(music.authorName));
+                    LogUtils.d(SafetyUtils.getString(music.categoryName));
+                    LogUtils.d("onPause：------------------------------");
+                }
             }
 
             @Override
             public void onPlayMusic(Music music) {
                 try {
-
                     if (music != null) {
-                        Log.d(TAG, "onPlayMusic：------------------------------");
-                        Log.d(TAG, SafetyUtils.getString(music.albumName));
-                        Log.d(TAG, SafetyUtils.getString(music.audioName));
-                        Log.d(TAG, SafetyUtils.getString(music.authorName));
-                        Log.d(TAG, SafetyUtils.getString(music.categoryName));
-                        Log.d(TAG, SafetyUtils.getString(music.localPicUri));
-                        Log.d(TAG, SafetyUtils.getString(music.localPlayUrl));
-                        Log.d(TAG, SafetyUtils.getString(music.picUrl));
+                        LogUtils.d("onPlayMusic：------------------------------");
+                        LogUtils.d(SafetyUtils.getString(music.albumName));
+                        LogUtils.d(SafetyUtils.getString(music.audioName));
+                        LogUtils.d(SafetyUtils.getString(music.authorName));
+                        LogUtils.d(SafetyUtils.getString(music.categoryName));
+                        LogUtils.d(SafetyUtils.getString(music.localPicUri));
+                        LogUtils.d(SafetyUtils.getString(music.localPlayUrl));
+                        LogUtils.d(SafetyUtils.getString(music.picUrl));
 
                         runOnUiThread(() -> Glide.with(YunTingActivity.this)
                                 .load(SafetyUtils.getString(music.picUrl))
                                 .circleCrop()
                                 .into(iconIv));
                         //
-                        Log.d(TAG, "onPlayMusic：------------------------------ " + Thread.currentThread().getName());
+                        LogUtils.d("onPlayMusic：------------------------------ " + Thread.currentThread().getName());
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -97,17 +102,17 @@ public class YunTingActivity extends AppCompatActivity {
 
             @Override
             public void onCompleted() {
-
             }
 
             @Override
             public void onError(ErrorInfo errorInfo) {
-                Log.d(TAG, "onError: " + errorInfo.errCode);
+                LogUtils.d("onError: " + errorInfo.errCode);
+                LogUtils.d("onError: " + errorInfo.info);
             }
 
             @Override
             public void onPlayStateChange(PlayState playState, int i, Music music) {
-                Log.d(TAG, "onPlayStateChange: " + i);
+                LogUtils.d("onPlayStateChange: " + i);
             }
         });
 

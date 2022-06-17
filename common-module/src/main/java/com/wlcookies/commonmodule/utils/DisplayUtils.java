@@ -13,8 +13,6 @@ public class DisplayUtils {
     private DisplayUtils() {
     }
 
-    private static final String TAG = DisplayUtils.class.getSimpleName();
-
     /**
      * Value of dp to value of px.
      *
@@ -80,7 +78,7 @@ public class DisplayUtils {
         int height = metric.heightPixels;//屏幕高度（单位：px）
         float density = metric.density;//屏幕密度（常见的有：1.5、2.0、3.0）
         int densityDpi = metric.densityDpi;//屏幕DPI（常见的有：240、320、480）
-        Log.d(TAG, "width =" + width + ",height =" + height + ",density =" + density + ",densityDpi ="
+        LogUtils.d("width =" + width + ",height =" + height + ",density =" + density + ",densityDpi ="
                 + densityDpi);
     }
 }

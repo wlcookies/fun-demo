@@ -16,6 +16,10 @@ import androidx.core.content.ContextCompat;
  * @see Manifest.permission
  */
 public class PermissionUtils {
+
+    private PermissionUtils() {
+    }
+
     /**
      * Check single permission
      *

@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wlcookies.fundemo"
+    android:sharedUserId="android.uid.system"
     >
-    <!--android:sharedUserId="android.uid.system"  -->
+    <!--  -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -30,8 +31,7 @@
         android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Fundemo"
-        tools:targetApi="31">
+        android:theme="@style/Theme.Fundemo">
         <activity
             android:name=".ui.yunting.YunTingActivity"
             android:exported="false" />

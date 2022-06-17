@@ -4,7 +4,7 @@
 
 - [Android apk签名详解——AS签名、获取签名信息、系统签名、命令行签名](https://blog.csdn.net/jb_home/article/details/121342438)
 
-## gradle配置签名信息
+## 配置签名信息
 
 ```groovy
 android {
@@ -57,12 +57,22 @@ android {
 }
 ```
 
+## 打包命令
+
+```bash
+./gradlew assembleRelease
+
+```
+
+## 配置 framework.jar
+
+[配置 framework.jar](https://blog.csdn.net/xiayiye5/article/details/122361024)
+
 ## jks 与 keystore 区别
 
 ## 获取签名文件的 MD5 和 sha256 的值
 
 ```shell
 keytool -v -list -keystore xxxx.jks
+
 ```
-
-

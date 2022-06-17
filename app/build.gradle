@@ -73,10 +73,6 @@ dependencies {
 
     // 通用模块
     implementation project(path: ':common-module')
-    // 蓝牙相关模块
-    implementation project(path: ':bluetooth-common-module')
-    // mediasession相关模块
-    implementation project(path: ':mediasession-module')
 
     // androidX media2
     implementation "androidx.media2:media2-session:${rootProject.ext.media2_version}"
@@ -96,5 +92,4 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-
 }

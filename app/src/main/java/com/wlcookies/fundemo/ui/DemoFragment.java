@@ -126,6 +126,7 @@ public class DemoFragment extends Fragment {
             FunctionBean functionBean = functionBeans.get(position);
             switch (functionBean.id) {
                 case 1: // 蓝牙相关
+
                     break;
                 case 2: // wifi相关
                     break;

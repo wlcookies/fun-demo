@@ -24,8 +24,8 @@ import androidx.media2.session.MediaBrowser;
 import com.wlcookies.commonmodule.utils.DateUtils;
 import com.wlcookies.commonmodule.utils.SafetyUtils;
 import com.wlcookies.fundemo.R;
-import com.wlcookies.mediasessionmodule.MediaClient;
-import com.wlcookies.mediasessionmodule.MediaClientViewModel;
+import com.wlcookies.commonmodule.media.client.MediaClient;
+import com.wlcookies.commonmodule.media.client.MediaClientViewModel;
 
 /**
  * 蓝牙音乐界面

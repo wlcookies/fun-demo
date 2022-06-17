@@ -13,12 +13,13 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.wlcookies.fundemo.BaseActivity;
 import com.wlcookies.fundemo.R;
 
 /**
  * 蓝牙音乐
  */
-public class BluetoothMusicActivity extends AppCompatActivity {
+public class BluetoothMusicActivity extends BaseActivity {
 
     private static final String TAG = "BluetoothMusicActivity";
 
