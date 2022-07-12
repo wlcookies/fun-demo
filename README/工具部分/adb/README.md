@@ -57,3 +57,6 @@ armeabi-v8a:armv8架构 （64位）
 
 x86_64:x86_64架构 （64位）
 ```
+
+
+[getprop，dumpsys](https://blog.csdn.net/qq_28171461/article/details/60964563)
