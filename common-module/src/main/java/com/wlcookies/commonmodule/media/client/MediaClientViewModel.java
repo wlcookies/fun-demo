@@ -9,10 +9,27 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.media2.common.MediaMetadata;
 
+import com.wlcookies.commonmodule.utils.LogUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
 /**
  * 媒体客户端ViewModel
  */
 public class MediaClientViewModel extends ViewModel {
+
+    /**
+     * current playing media session service package name
+     */
+    private final MutableLiveData<String> _currentPlayingComponentName = new MutableLiveData<>();
+    public LiveData<String> currentPlayingComponentName = _currentPlayingComponentName;
+
+    public void setCurrentPlayingComponentName(String pkgName) {
+        _currentPlayingComponentName.postValue(pkgName);
+    }
 
     /**
      * 初始化组件的结果
@@ -20,8 +37,19 @@ public class MediaClientViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _initMediaBrowserResult = new MutableLiveData<>();
     public LiveData<Boolean> initMediaBrowserResult = _initMediaBrowserResult;
 
-    public void setInitMediaBrowserResult(boolean result) {
+    private final MutableLiveData<Map<String, Boolean>> _initMediaBrowserResultCollection = new MutableLiveData<>();
+    public LiveData<Map<String, Boolean>> initMediaBrowserResultCollection = _initMediaBrowserResultCollection;
+
+    public void setInitMediaBrowserResult(String serviceName, boolean result) {
         _initMediaBrowserResult.setValue(result);
+        Map<String, Boolean> value = _initMediaBrowserResultCollection.getValue();
+        if (value == null) {
+            value = new HashMap<>();
+        }
+        if (serviceName != null && !"".equals(serviceName)) {
+            value.put(serviceName, result);
+            _initMediaBrowserResultCollection.setValue(value);
+        }
     }
 
     /**
@@ -30,8 +58,19 @@ public class MediaClientViewModel extends ViewModel {
     private final MutableLiveData<Integer> _playState = new MutableLiveData<>();
     public LiveData<Integer> playState = _playState;
 
-    public void setPlayState(int state) {
+    private final MutableLiveData<Map<String, Integer>> _playStateCollection = new MutableLiveData<>();
+    public LiveData<Map<String, Integer>> playStateCollection = _playStateCollection;
+
+    public void setPlayState(String serviceName, int state) {
         _playState.setValue(state);
+        Map<String, Integer> value = _playStateCollection.getValue();
+        if (value == null) {
+            value = new HashMap<>();
+        }
+        if (serviceName != null && !"".equals(serviceName)) {
+            value.put(serviceName, state);
+            _playStateCollection.setValue(value);
+        }
     }
 
     /**
@@ -40,8 +79,19 @@ public class MediaClientViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _connectState = new MutableLiveData<>();
     public LiveData<Boolean> connectState = _connectState;
 
-    public void setConnectState(boolean isConnect) {
+    private final MutableLiveData<Map<String, Boolean>> _connectStateCollection = new MutableLiveData<>();
+    public LiveData<Map<String, Boolean>> connectStateCollection = _connectStateCollection;
+
+    public void setConnectState(String serviceName, boolean isConnect) {
         _connectState.setValue(isConnect);
+        Map<String, Boolean> value = _connectStateCollection.getValue();
+        if (value == null) {
+            value = new HashMap<>();
+        }
+        if (serviceName != null && !"".equals(serviceName)) {
+            value.put(serviceName, isConnect);
+            _connectStateCollection.setValue(value);
+        }
     }
 
     /**
@@ -50,8 +100,19 @@ public class MediaClientViewModel extends ViewModel {
     private final MutableLiveData<MediaMetadata> _currentMediaItem = new MutableLiveData<>();
     public LiveData<MediaMetadata> currentMediaItem = _currentMediaItem;
 
-    public void setCurrentMediaItem(@NonNull MediaMetadata mediaMetadata) {
-        _currentMediaItem.setValue(mediaMetadata);
+    private final MutableLiveData<Map<String, MediaMetadata>> _currentMediaItemCollection = new MutableLiveData<>();
+    public LiveData<Map<String, MediaMetadata>> currentMediaItemCollection = _currentMediaItemCollection;
+
+    public void setCurrentMediaItem(String serviceName, @NonNull MediaMetadata mediaMetadata) {
+        _currentMediaItem.postValue(mediaMetadata);
+        Map<String, MediaMetadata> value = _currentMediaItemCollection.getValue();
+        if (value == null) {
+            value = new HashMap<>();
+        }
+        if (serviceName != null && !"".equals(serviceName)) {
+            value.put(serviceName, mediaMetadata);
+            _currentMediaItemCollection.postValue(value);
+        }
     }
 
     /**
@@ -60,9 +121,21 @@ public class MediaClientViewModel extends ViewModel {
     private final MutableLiveData<Integer> _currentPosition = new MutableLiveData<>();
     public LiveData<Integer> currentPosition = _currentPosition;
 
-    public void setCurrentPosition(int position) {
-        _currentPosition.setValue(position);
+    private final MutableLiveData<Map<String, Integer>> _currentPositionCollection = new MutableLiveData<>();
+    public LiveData<Map<String, Integer>> currentPositionCollection = _currentPositionCollection;
+
+    public void setCurrentPosition(String serviceName, int position) {
+        _currentPosition.postValue(position);
+        Map<String, Integer> value = _currentPositionCollection.getValue();
+        if (value == null) {
+            value = new HashMap<>();
+        }
+        if (serviceName != null && !"".equals(serviceName)) {
+            value.put(serviceName, position);
+            _currentPositionCollection.postValue(value);
+        }
     }
+    // ---------------------------------------------------------------------------------------------
 
     /**
      * 获取当前媒体ICON

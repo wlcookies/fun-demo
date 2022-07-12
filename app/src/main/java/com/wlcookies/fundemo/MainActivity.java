@@ -2,6 +2,7 @@ package com.wlcookies.fundemo;
 
 
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationBarView;
+import com.wlcookies.commonmodule.utils.PackageManagerUtils;
 import com.wlcookies.fundemo.databinding.ActivityMainBinding;
 import com.wlcookies.fundemo.ui.DemoFragment;
 import com.wlcookies.fundemo.ui.ToolFragment;
@@ -24,6 +26,8 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PackageManagerUtils.test(getPackageManager());
 
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());

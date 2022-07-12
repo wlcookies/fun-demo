@@ -16,12 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.media2.common.MediaItem;
 import androidx.media2.common.MediaMetadata;
 import androidx.media2.common.SessionPlayer;
 import androidx.media2.session.MediaBrowser;
 
 import com.wlcookies.commonmodule.utils.DateUtils;
+import com.wlcookies.commonmodule.utils.LogUtils;
 import com.wlcookies.commonmodule.utils.SafetyUtils;
 import com.wlcookies.fundemo.R;
 import com.wlcookies.commonmodule.media.client.MediaClient;
@@ -31,8 +33,6 @@ import com.wlcookies.commonmodule.media.client.MediaClientViewModel;
  * 蓝牙音乐界面
  */
 public class BluetoothMusicFragment extends Fragment {
-
-    private static final String TAG = "BluetoothMusicFragment";
 
     private ObjectAnimator rotationAnimator;
     private UnableDragSeekBar mSeekBar;
@@ -71,10 +71,14 @@ public class BluetoothMusicFragment extends Fragment {
         ImageView mMusicIconIv = view.findViewById(R.id.music_icon_iv);
         mMusicTitleTv = view.findViewById(R.id.music_title_tv);
 
+        MediaClientViewModel dataViewModel = new ViewModelProvider(this).get(MediaClientViewModel.class);
+
         mSeekBar.setTouch(false); // 设置不可拖拽
 
-        mMediaClient = new MediaClient(requireActivity(), "com.android.bluetooth", null);
-        MediaClientViewModel dataViewModel = mMediaClient.getDataViewModel(this);
+        mMediaClient = new MediaClient(requireActivity(), "com.android.bluetooth.avrcpcontroller.BluetoothMediaBrowserService", dataViewModel, null);
+
+        mMediaClient.logMediaSessionSupportList();
+
         mMediaClient.setSeekBar(mSeekBar);
 
         // 旋转动画
@@ -117,6 +121,7 @@ public class BluetoothMusicFragment extends Fragment {
         });
         // 播放状态
         dataViewModel.playState.observe(getViewLifecycleOwner(), playState -> {
+            LogUtils.d("播放状态 " + playState);
             // 是否在播放
             isPlaying = playState == SessionPlayer.PLAYER_STATE_PLAYING;
             mPlayIv.setImageDrawable(isPlaying ?
@@ -171,7 +176,7 @@ public class BluetoothMusicFragment extends Fragment {
 
         // 当前播放媒体
         dataViewModel.currentMediaItem.observe(getViewLifecycleOwner(), mediaMetadata -> {
-
+            LogUtils.d("当前播放媒体 " + mediaMetadata);
             mediaDuration = (int) dataViewModel.getMediaDuration(mediaMetadata);
             mSeekBar.setMax(mediaDuration);
 
@@ -181,7 +186,8 @@ public class BluetoothMusicFragment extends Fragment {
 
         // 当前位置
         dataViewModel.currentPosition.observe(getViewLifecycleOwner(), progress -> {
-            if (!MediaClient.isSeeking) {
+            LogUtils.d("当前位置 " + progress);
+            if (!mMediaClient.isSeeking()) {
                 mSeekBar.setProgress(progress);
             }
             if (progress >= mediaDuration) {

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".ui.WidgetFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="组件" />
+    <com.wlcookies.fundemo.widget.CameraImageView
+        android:id="@+id/camera_iv"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="@dimen/dp_200" />
 
-</FrameLayout>
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/progress_sb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="360"
+        android:min="1" />
+</androidx.appcompat.widget.LinearLayoutCompat>

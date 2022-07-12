@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.wlcookies.commonmodule.utils.DateUtils;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;

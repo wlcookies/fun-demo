@@ -7,9 +7,9 @@ public class DateUtils {
 
     public static String hhmm(int time) {
         String timeStr = null;
-        int hour = 0;
-        int minute = 0;
-        int second = 0;
+//        int hour = 0;
+        int minute;
+        int second;
         if (time <= 0)
             return "00:00";
         else {
@@ -28,18 +28,18 @@ public class DateUtils {
     public static String unitFormat(int i) {// 时分秒的格式转换
         String retStr = null;
         if (i >= 0 && i < 10)
-            retStr = "0" + Integer.toString(i);
+            retStr = "0" + i;
         else
             retStr = "" + i;
         return retStr;
     }
 
     public static String unitFormat2(int i) {// 毫秒的格式转换
-        String retStr = null;
+        String retStr;
         if (i >= 0 && i < 10)
-            retStr = "00" + Integer.toString(i);
+            retStr = "00" + i;
         else if (i >= 10 && i < 100) {
-            retStr = "0" + Integer.toString(i);
+            retStr = "0" + i;
         } else
             retStr = "" + i;
         return retStr;

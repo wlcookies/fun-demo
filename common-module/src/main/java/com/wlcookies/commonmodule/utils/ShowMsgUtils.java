@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 /**
- * 提示（吐司）
+ * 提示信息
  */
 public class ShowMsgUtils {
 

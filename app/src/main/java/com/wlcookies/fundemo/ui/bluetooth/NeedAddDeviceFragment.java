@@ -21,8 +21,6 @@ import com.wlcookies.fundemo.R;
  */
 public class NeedAddDeviceFragment extends Fragment {
 
-    private static final String TAG = "NeedAddDeviceFragment";
-
     public static NeedAddDeviceFragment newInstance() {
         return new NeedAddDeviceFragment();
     }

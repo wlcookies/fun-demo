@@ -37,3 +37,23 @@ adb shell am broadcast -a android.bluetooth.adapter.action.STATE_CHANGED --ei an
 adb shell am start -a com.bmi.launcher/.ui.activity.MainActivity
 
 ```
+
+## 查看APK是32位还是64位
+
+```
+ARM 32位对应的是armv7架构、armv6架构、armv5架构
+
+ARM 64位是armv8架构
+
+常用的abi:
+
+armeabi: armv5架构和armv6架构 （32位）
+
+armeabi-v7a:armv7架构 （32位）
+
+x86:x86架构 （32位）
+
+armeabi-v8a:armv8架构 （64位）
+
+x86_64:x86_64架构 （64位）
+```

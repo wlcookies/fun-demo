@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -17,6 +16,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.wlcookies.fundemo.R;
 import com.wlcookies.fundemo.databinding.FragmentDemoBinding;
 import com.wlcookies.fundemo.ui.bluetooth.BluetoothMusicActivity;
+import com.wlcookies.fundemo.ui.media.MediaClientChangeActivity;
 import com.wlcookies.fundemo.ui.yunting.YunTingActivity;
 
 import java.util.ArrayList;
@@ -112,6 +112,12 @@ public class DemoFragment extends Fragment {
         functionBeans.add(new FunctionBean(
                 6, "云听测试", R.drawable.ic_content_provider
         ));
+        functionBeans.add(new FunctionBean(
+                7, "多个MediaClient", R.drawable.ic_media
+        ));
+        functionBeans.add(new FunctionBean(
+                8, "测试", R.drawable.ic_media
+        ));
         BaseQuickAdapter<FunctionBean, BaseViewHolder> adapter = new BaseQuickAdapter<FunctionBean, BaseViewHolder>(R.layout.demo_function_list_item, functionBeans) {
             @Override
             protected void convert(@NonNull BaseViewHolder holder, FunctionBean functionBean) {
@@ -139,6 +145,12 @@ public class DemoFragment extends Fragment {
                     break;
                 case 6: // 云听测试
                     startActivity(YunTingActivity.newInstance(requireActivity()));
+                    break;
+                case 7: // 多个MediaClient
+                    startActivity(MediaClientChangeActivity.newInstance(requireActivity()));
+                    break;
+                case 8: // 测试
+                    startActivity(TestActivity.newInstance(requireActivity()));
                     break;
                 default:
                     break;

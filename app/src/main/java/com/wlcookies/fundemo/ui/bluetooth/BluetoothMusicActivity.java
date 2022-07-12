@@ -21,8 +21,6 @@ import com.wlcookies.fundemo.R;
  */
 public class BluetoothMusicActivity extends BaseActivity {
 
-    private static final String TAG = "BluetoothMusicActivity";
-
     private A2dpConnectionStateReceiver mA2dpConnectionStateReceiver = new A2dpConnectionStateReceiver();
 
     public static Intent newInstance(Context context) {

@@ -17,20 +17,18 @@ public class LogUtils {
      */
     private static String getFunctionName() {
         StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-        if (sts != null) {
-            for (StackTraceElement st : sts) {
-                if (st.isNativeMethod()) {
-                    continue;
-                }
-                if (st.getClassName().equals(Thread.class.getName())) {
-                    continue;
-                }
-                if (st.getClassName().equals(LogUtils.class.getName())) {
-                    continue;
-                }
-                //  + ", at " + st.getClassName() + "." + st.getMethodName()
-                return "[ Thread:" + Thread.currentThread().getName() + "(" + st.getFileName() + ":" + st.getLineNumber() + ")" + " ]";
+        for (StackTraceElement st : sts) {
+            if (st.isNativeMethod()) {
+                continue;
             }
+            if (st.getClassName().equals(Thread.class.getName())) {
+                continue;
+            }
+            if (st.getClassName().equals(LogUtils.class.getName())) {
+                continue;
+            }
+            //  + ", at " + st.getClassName() + "." + st.getMethodName()
+            return "[ Thread:" + Thread.currentThread().getName() + "(" + st.getFileName() + ":" + st.getLineNumber() + ")" + " ]";
         }
         return null;
     }
@@ -52,6 +50,30 @@ public class LogUtils {
     public static void d(String tag, String msg) {
         if (isDebug) {
             Log.d(tag, getMsgFormat(msg));
+        }
+    }
+
+    public static void i(String msg) {
+        if (isDebug) {
+            Log.i(APP_TAG, getMsgFormat(msg));
+        }
+    }
+
+    public static void i(String tag, String msg) {
+        if (isDebug) {
+            Log.i(tag, getMsgFormat(msg));
+        }
+    }
+
+    public static void e(String msg) {
+        if (isDebug) {
+            Log.e(APP_TAG, getMsgFormat(msg));
+        }
+    }
+
+    public static void e(String tag, String msg) {
+        if (isDebug) {
+            Log.e(tag, getMsgFormat(msg));
         }
     }
 }
