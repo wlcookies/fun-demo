@@ -34,6 +34,7 @@ import java.util.concurrent.Executor;
 public class MediaClient {
 
     private final Executor mMainExecutor;
+    private final SessionToken mAvailableToken;
 
     public MediaBrowser getMediaController() {
         return mMediaController;
@@ -46,6 +47,7 @@ public class MediaClient {
     private final MediaSessionManager mMediaSessionManager;
 
     private final Handler progressHandler = new Handler(Looper.getMainLooper());
+    private final Handler reConnectHandler = new Handler(Looper.getMainLooper());
 
     private Runnable mProgressRunnable;
 
@@ -53,26 +55,24 @@ public class MediaClient {
 
     private final MediaClientViewModel mMediaClientViewModel;
 
+    private final Bundle mConnectionHints;
+
     public MediaClient(@NonNull Context context, @NonNull String serviceName, MediaClientViewModel mediaClientViewModel, Bundle connectionHints) {
 
         this.mContext = context;
         this.mServiceName = serviceName;
         this.mMediaClientViewModel = mediaClientViewModel;
+        this.mConnectionHints = connectionHints;
 
         mMainExecutor = ContextCompat.getMainExecutor(context);
 
         mMediaSessionManager = MediaSessionManager.getInstance(mContext);
 
-        SessionToken availableToken = getAvailableToken(serviceName);
+        mAvailableToken = getAvailableToken(serviceName);
         //
-        if (availableToken != null) {
-            MediaBrowser.Builder builder = new MediaBrowser.Builder(context)
-                    .setControllerCallback(mMainExecutor, new ControllerCallback())
-                    .setSessionToken(availableToken);
-            if (connectionHints != null) {
-                builder.setConnectionHints(connectionHints);
-            }
-            mMediaController = builder.build();
+        if (mAvailableToken != null) {
+
+            createMediaController();
 
             mMediaClientViewModel.setInitMediaBrowserResult(serviceName, true);
 
@@ -89,6 +89,16 @@ public class MediaClient {
             LogUtils.e("MediaClient: Not Found MediaSession Service");
             mMediaClientViewModel.setInitMediaBrowserResult(serviceName, false);
         }
+    }
+
+    private void createMediaController() {
+        MediaBrowser.Builder builder = new MediaBrowser.Builder(mContext)
+                .setControllerCallback(mMainExecutor, new ControllerCallback())
+                .setSessionToken(mAvailableToken);
+        if (mConnectionHints != null) {
+            builder.setConnectionHints(mConnectionHints);
+        }
+        mMediaController = builder.build();
     }
 
     public boolean isSeeking() {
@@ -250,8 +260,7 @@ public class MediaClient {
         @Override
         public void onConnected(@NonNull MediaController controller, @NonNull SessionCommandGroup allowedCommands) {
             super.onConnected(controller, allowedCommands);
-
-            LogUtils.d("MediaSession - onConnected");
+            LogUtils.d("MediaSession - onConnected " + controller.getConnectedToken());
 
             // setting connect state
             isConnected(true);
@@ -259,7 +268,6 @@ public class MediaClient {
             setPlayState(controller);
             // update play progress
             updatePosition();
-
         }
 
         @Override
@@ -314,7 +322,13 @@ public class MediaClient {
             isConnected(false);
 
             // 发起重连操作
-
+            reConnectHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    LogUtils.d("MediaSession - 正在尝试重新连接 " + mServiceName);
+                    createMediaController();
+                }
+            }, 1000 * 10);
         }
 
         // ---------------------------------------------------------------------------------
