@@ -4,6 +4,9 @@ import android.widget.SeekBar;
 
 import androidx.annotation.Nullable;
 import androidx.media2.session.MediaBrowser;
+import androidx.media2.session.SessionResult;
+
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Map;
 
@@ -13,9 +16,9 @@ public interface IMediaController {
 
     void play(@Nullable String serviceName);
 
-    void skipToPrevious(@Nullable String serviceName);
+    ListenableFuture<SessionResult>  skipToPrevious(@Nullable String serviceName);
 
-    void skipToNext(@Nullable String serviceName);
+    ListenableFuture<SessionResult> skipToNext(@Nullable String serviceName);
 
     void seekTo(@Nullable String serviceName, long position);
 

@@ -19,6 +19,7 @@ import com.wlcookies.commonmodule.utils.LogUtils;
 import com.wlcookies.fundemo.BaseActivity;
 import com.wlcookies.fundemo.R;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -48,11 +49,11 @@ public class MediaClientChangeActivity extends BaseActivity {
 //        mediaClient.logMediaSessionSupportList();
 //        mediaClient.setMediaClientViewModel(mediaClientViewModel);
 
-        HashSet<String> strings = new HashSet<>();
+        ArrayList<String> strings = new ArrayList<>();
 //        strings.add("com.example.android.mediasession.service.MusicService");
 //        strings.add("com.netease.cloudmusic.module.ucar.UCarService");
-        strings.add("com.bmit.miguservice.mediasession.MiGuSessionService");
-//        strings.add("com.bmit.yuntingservice.mediasession.YunTingSessionService");
+//        strings.add("com.bmit.miguservice.mediasession.MiGuSessionService");
+        strings.add("com.bmit.yuntingservice.mediasession.YunTingSessionService");
         MediaSourceChangeClient mediaSourceChangeClient = new MediaSourceChangeClient(this, strings, mediaClientViewModel);
 
 
@@ -99,7 +100,7 @@ public class MediaClientChangeActivity extends BaseActivity {
         mediaClientViewModel.currentPositionCollection.observe(this, new Observer<Map<String, Integer>>() {
             @Override
             public void onChanged(Map<String, Integer> stringIntegerMap) {
-                LogUtils.d("当前播放进度 " + stringIntegerMap);
+//                LogUtils.d("当前播放进度 " + stringIntegerMap);
             }
         });
 

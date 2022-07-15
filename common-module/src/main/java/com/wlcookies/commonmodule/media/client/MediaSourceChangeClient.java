@@ -6,7 +6,9 @@ import android.widget.SeekBar;
 
 import androidx.annotation.Nullable;
 import androidx.media2.session.MediaBrowser;
+import androidx.media2.session.SessionResult;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.wlcookies.commonmodule.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -19,37 +21,9 @@ public class MediaSourceChangeClient implements IMediaController {
 
     private final Map<String, MediaClient> mMediaSourceClient = new HashMap<>();
     private final MediaClientViewModel mMediaClientViewModel;
-
-    private final List<String> mNeedReconnectList = new ArrayList<>(); // 用于重连的集合
-
     private final Context mContext;
 
-    private final Handler mReconnectHandler = new Handler();
-
-    private final Runnable mReconnectRunnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        LogUtils.d("正在尝试重新连接媒体服务：" + mNeedReconnectList);
-                        ArrayList<String> lll = new ArrayList<>(mNeedReconnectList);
-                        for (String serviceName : lll) {
-                            MediaClient mediaClient = new MediaClient(mContext, serviceName, mMediaClientViewModel, null);
-                            mMediaSourceClient.put(serviceName, mediaClient);
-                        }
-                    }
-                }).start();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                LogUtils.d(e.getMessage());
-            }
-        }
-    };
-
-    public MediaSourceChangeClient(Context context, Set<String> mediaSourcePkgSet, MediaClientViewModel mediaClientViewModel) {
+    public MediaSourceChangeClient(Context context, List<String> mediaSourcePkgSet, MediaClientViewModel mediaClientViewModel) {
         this.mContext = context;
         this.mMediaClientViewModel = mediaClientViewModel;
         for (String serviceName : mediaSourcePkgSet) {
@@ -79,20 +53,25 @@ public class MediaSourceChangeClient implements IMediaController {
     }
 
     @Override
-    public void skipToPrevious(@Nullable String serviceName) {
+    public ListenableFuture<SessionResult> skipToPrevious(@Nullable String serviceName) {
         String currentMediaSource = serviceName != null ? serviceName : getCurrentMediaSource();
         MediaClient mediaClient = mMediaSourceClient.get(currentMediaSource);
         if (mediaClient != null) {
-            mediaClient.skipToPrevious();
+            return mediaClient.skipToPrevious();
+        } else {
+            return null;
         }
     }
 
     @Override
-    public void skipToNext(@Nullable String serviceName) {
+    public @Nullable
+    ListenableFuture<SessionResult> skipToNext(@Nullable String serviceName) {
         String currentMediaSource = serviceName != null ? serviceName : getCurrentMediaSource();
         MediaClient mediaClient = mMediaSourceClient.get(currentMediaSource);
         if (mediaClient != null) {
-            mediaClient.skipToNext();
+            return mediaClient.skipToNext();
+        } else {
+            return null;
         }
     }
 
@@ -139,7 +118,6 @@ public class MediaSourceChangeClient implements IMediaController {
         if (serviceName == null) {
             // all close
             mMediaSourceClient.forEach((s, mediaClient) -> mediaClient.close());
-            mReconnectHandler.removeCallbacks(mReconnectRunnable);
         } else {
             MediaClient mediaClient = mMediaSourceClient.get(serviceName);
             if (mediaClient != null) {
@@ -155,30 +133,7 @@ public class MediaSourceChangeClient implements IMediaController {
      */
     @Override
     public synchronized void reconnect(Map<String, Boolean> needReconnect) {
-        // 1. 分离 needReconnect 中，value 是 false 的 Key
-        // 2. 判断 key 是不是在 mNeedReconnectList 中存在
-        // 3. 执行延迟操作
-        for (String serviceNameKey : needReconnect.keySet()) {
-            Boolean connectResult = needReconnect.get(serviceNameKey);
-            if (connectResult != null) {
-                boolean contains = mNeedReconnectList.contains(serviceNameKey);
-                if (connectResult) {
-                    if (contains) {
-                        mNeedReconnectList.remove(serviceNameKey);
-                    }
-                } else {
-                    if (!contains) {
-                        mNeedReconnectList.add(serviceNameKey);
-                    }
-                }
-            }
-        }
-        mReconnectHandler.removeCallbacks(mReconnectRunnable);
-        if (mNeedReconnectList.size() > 0) {
-            // 重连延迟间隔
-            long NEED_RECONNECT_DELAY = 10 * 1000;
-            mReconnectHandler.postDelayed(mReconnectRunnable, NEED_RECONNECT_DELAY);
-        }
+
     }
 
     public void logMediaSessionSupportList() {
@@ -189,7 +144,7 @@ public class MediaSourceChangeClient implements IMediaController {
         }
     }
 
-    private String getCurrentMediaSource() {
+    public String getCurrentMediaSource() {
         if (mMediaClientViewModel != null) {
             return mMediaClientViewModel.currentPlayingComponentName.getValue() == null ? "" : mMediaClientViewModel.currentPlayingComponentName.getValue();
         } else {

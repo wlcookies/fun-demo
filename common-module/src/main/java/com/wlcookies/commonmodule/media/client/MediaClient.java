@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -24,7 +23,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.wlcookies.commonmodule.utils.LogUtils;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 /**
@@ -66,7 +64,7 @@ public class MediaClient {
         mMediaSessionManager = MediaSessionManager.getInstance(mContext);
 
         SessionToken availableToken = getAvailableToken(serviceName);
-
+        //
         if (availableToken != null) {
             MediaBrowser.Builder builder = new MediaBrowser.Builder(context)
                     .setControllerCallback(mMainExecutor, new ControllerCallback())
@@ -135,6 +133,7 @@ public class MediaClient {
      */
     public void play() {
         if (mMediaController != null && getPlayerState() == SessionPlayer.PLAYER_STATE_PAUSED) {
+            LogUtils.d("执行播放");
             mMediaController.play();
         }
     }
@@ -144,6 +143,7 @@ public class MediaClient {
      */
     public void pause() {
         if (mMediaController != null && getPlayerState() == SessionPlayer.PLAYER_STATE_PLAYING) {
+            LogUtils.d("执行暂停");
             mMediaController.pause();
         }
     }
@@ -161,18 +161,24 @@ public class MediaClient {
     /**
      * Control Next Play
      */
-    public void skipToNext() {
+    public ListenableFuture<SessionResult> skipToNext() {
         if (mMediaController != null) {
-            mMediaController.skipToNextPlaylistItem();
+            LogUtils.d("执行下一曲");
+            return mMediaController.skipToNextPlaylistItem();
+        } else {
+            return null;
         }
     }
 
     /**
      * Control Previous Play
      */
-    public void skipToPrevious() {
+    public ListenableFuture<SessionResult> skipToPrevious() {
         if (mMediaController != null) {
-            mMediaController.skipToPreviousPlaylistItem();
+            LogUtils.d("执行上一曲");
+            return mMediaController.skipToPreviousPlaylistItem();
+        } else {
+            return null;
         }
     }
 
@@ -244,12 +250,16 @@ public class MediaClient {
         @Override
         public void onConnected(@NonNull MediaController controller, @NonNull SessionCommandGroup allowedCommands) {
             super.onConnected(controller, allowedCommands);
+
+            LogUtils.d("MediaSession - onConnected");
+
             // setting connect state
             isConnected(true);
             // setting play state
             setPlayState(controller);
             // update play progress
             updatePosition();
+
         }
 
         @Override
@@ -259,6 +269,8 @@ public class MediaClient {
             setPlayState(controller);
             // update play progress
             updatePosition();
+
+            LogUtils.d("MediaSession - onPlayerStateChanged");
         }
 
         @Override
@@ -272,6 +284,21 @@ public class MediaClient {
                         setCurrentMediaItem(metadata);
                     }
                 }
+            } else {
+                LogUtils.d("MediaSession - onCurrentMediaItemChanged null");
+            }
+        }
+
+        @Override
+        public void onPlaybackCompleted(@NonNull MediaController controller) {
+            super.onPlaybackCompleted(controller);
+
+            LogUtils.d("MediaSession - onPlaybackCompleted");
+
+            if (mMediaClientViewModel != null) {
+                // update current playing Component
+//                LogUtils.d("MediaSession - 设置播放状态 " + controller.getPlayerState());
+                mMediaClientViewModel.setPlayState(mServiceName, SessionPlayer.PLAYER_STATE_PAUSED);
             }
         }
 
@@ -283,8 +310,11 @@ public class MediaClient {
         @Override
         public void onDisconnected(@NonNull MediaController controller) {
             super.onDisconnected(controller);
-            LogUtils.d("MediaClient disconnected");
+            LogUtils.d("MediaSession - onDisconnected");
             isConnected(false);
+
+            // 发起重连操作
+
         }
 
         // ---------------------------------------------------------------------------------
@@ -369,6 +399,7 @@ public class MediaClient {
                 }
             }
             mMediaClientViewModel.setPlayState(mServiceName, controller.getPlayerState());
+            LogUtils.d("MediaSession - setPlayState" + controller.getPlayerState());
         }
     }
 
@@ -381,6 +412,7 @@ public class MediaClient {
         if (mMediaClientViewModel != null) {
             mMediaClientViewModel.setConnectState(mServiceName, isConnected);
         }
+        LogUtils.d("MediaSession - isConnected " + isConnected);
     }
 
     /**
@@ -390,6 +422,7 @@ public class MediaClient {
      */
     private void setCurrentMediaItem(MediaMetadata mediaMetadata) {
         if (mMediaClientViewModel != null) {
+            LogUtils.d("MediaSession - setCurrentMediaItem " + mediaMetadata.toString());
             mMediaClientViewModel.setCurrentMediaItem(mServiceName, mediaMetadata);
         }
     }
