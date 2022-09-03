@@ -1,6 +1,7 @@
 package com.wlcookies.commonmodule.bluetooth.livedata;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
@@ -45,7 +46,17 @@ public class A2dpSinkStateLiveData extends LiveData<Integer> {
     private final BroadcastReceiver mA2dpSinkStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateState();
+            try {
+                String action = intent.getAction();
+                if ("android.bluetooth.a2dp-sink.profile.action.CONNECTION_STATE_CHANGED".equals(action)) {
+                    int a2dpState = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, BluetoothA2dp.STATE_DISCONNECTED);
+                    setValue(a2dpState);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                setValue((BluetoothA2dp.STATE_DISCONNECTED));
+            }
+
         }
     };
 
@@ -71,22 +82,18 @@ public class A2dpSinkStateLiveData extends LiveData<Integer> {
             int profileConnectionState = mBluetoothAdapter.getProfileConnectionState(11);
             switch (profileConnectionState) {
                 case BluetoothProfile.STATE_CONNECTING:
-                    state = BluetoothA2dpSinkState.STATE_CONNECTING;
+                    setValue(BluetoothA2dpSinkState.STATE_CONNECTING);
                     break;
                 case BluetoothProfile.STATE_CONNECTED:
-                    state = BluetoothA2dpSinkState.STATE_CONNECTED;
+                    setValue(BluetoothA2dpSinkState.STATE_CONNECTED);
                     break;
                 case BluetoothProfile.STATE_DISCONNECTING:
-                    state = BluetoothA2dpSinkState.STATE_DISCONNECTING;
+                    setValue(BluetoothA2dpSinkState.STATE_DISCONNECTING);
                     break;
-                default:
-                    state = BluetoothA2dpSinkState.STATE_DISCONNECTED;
+                case BluetoothProfile.STATE_DISCONNECTED:
+                    setValue(BluetoothA2dpSinkState.STATE_DISCONNECTED);
+                    break;
             }
-        } else {
-            state = BluetoothA2dpSinkState.STATE_DISCONNECTED;
-        }
-        if (getValue() == null || state != getValue()) {
-            setValue(state);
         }
     }
 }

@@ -36,29 +36,12 @@ public class TestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        mSimpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+        findViewById(R.id.add_bt).setOnClickListener(v -> {
 
-        mHandler = new Handler(Looper.getMainLooper());
-
-        mRunnable = () -> {
-            LogUtils.d(mSimpleDateFormat.format(new Date()));
-            mHandler.postDelayed(mRunnable, 1000L);
-        };
-
-        Button addBt = findViewById(R.id.add_bt);
-        Button removeBt = findViewById(R.id.remove_bt);
-
-        addBt.setOnClickListener(v -> {
-            mHandler.removeCallbacks(mRunnable);
-            mHandler.postDelayed(mRunnable, 1000L);
         });
+        findViewById(R.id.remove_bt).setOnClickListener(v -> {
 
-        removeBt.setOnClickListener(v -> {
-            mHandler.removeCallbacks(mRunnable);
         });
-    }
-
-    private void updateValue() {
 
     }
 }

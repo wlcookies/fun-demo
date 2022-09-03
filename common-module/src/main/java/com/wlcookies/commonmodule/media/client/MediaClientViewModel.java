@@ -103,7 +103,7 @@ public class MediaClientViewModel extends ViewModel {
     private final MutableLiveData<Map<String, MediaMetadata>> _currentMediaItemCollection = new MutableLiveData<>();
     public LiveData<Map<String, MediaMetadata>> currentMediaItemCollection = _currentMediaItemCollection;
 
-    public void setCurrentMediaItem(String serviceName, @NonNull MediaMetadata mediaMetadata) {
+    public void setCurrentMediaItem(String serviceName, MediaMetadata mediaMetadata) {
         _currentMediaItem.postValue(mediaMetadata);
         Map<String, MediaMetadata> value = _currentMediaItemCollection.getValue();
         if (value == null) {

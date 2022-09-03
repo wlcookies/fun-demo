@@ -1,5 +1,7 @@
 package com.wlcookies.fundemo;
 
+import static com.wlcookies.commonmodule.utils.DateUtils.hhmm;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -20,6 +22,6 @@ import java.util.Random;
 public class ExampleUnitTest {
     @Test
     public void test() {
-
+        System.out.println(hhmm(-1000));
     }
 }

@@ -34,7 +34,22 @@ adb shell wm size reset
 ```bash
 adb shell am broadcast -a android.bluetooth.adapter.action.STATE_CHANGED --ei android.bluetooth.adapter.extra.STATE 3
 
+adb shell am broadcast -a com.autonavi.amapauto.AUTONAVI_STANDARD_BROADCAST_SEND --ei com.autonavi.amapauto.KEY_TYPE 10019 --ei com.autonavi.amapauto.EXTRA_STATE 8
+
+adb shell am broadcast -a AUTONAVI_STANDARD_BROADCAST_SEND --ei KEY_TYPE 10019 --ei EXTRA_STATE 8
+
 adb shell am start -a com.bmi.launcher/.ui.activity.MainActivity
+
+
+# 查询 adb shell 所有命令 
+adb shell ls /system/bin
+
+adb shell am start -a com.bmi.launcher/.ui.activity.MainActivity -- display 1
+
+# 系统Car设置
+adb shell am start  -n com.android.car.settings/com.android.car.settings.Settings
+
+adb shell am start -n com.debug.loggerui/.MainActivity
 
 ```
 
@@ -59,4 +74,7 @@ x86_64:x86_64架构 （64位）
 ```
 
 
+
 [getprop，dumpsys](https://blog.csdn.net/qq_28171461/article/details/60964563)
+
+[命令行工具](https://developer.android.google.cn/studio/command-line?hl=zh-cn)

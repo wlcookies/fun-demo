@@ -4,21 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#343333"
+    android:padding="20dp"
     tools:context=".ui.TestActivity">
 
-    <Button
+    <TextView
         android:id="@+id/add_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="@dimen/dp_100"
         android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/selector_app_state_pressed"
         android:text="添加"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <TextView
         android:id="@+id/remove_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="@dimen/dp_100"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/selector_app_state_pressed"
         android:text="移除"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_bt" />

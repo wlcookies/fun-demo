@@ -12,12 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.wlcookies.fundemo.R;
 import com.wlcookies.fundemo.databinding.FragmentDemoBinding;
 import com.wlcookies.fundemo.ui.bluetooth.BluetoothMusicActivity;
 import com.wlcookies.fundemo.ui.media.MediaClientChangeActivity;
-import com.wlcookies.fundemo.ui.yunting.YunTingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +127,13 @@ public class DemoFragment extends Fragment {
         };
         fragmentDemoBinding.functionRv.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
         fragmentDemoBinding.functionRv.setAdapter(adapter);
+        adapter.addChildClickViewIds(R.id.icon_iv);
+        adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
 
+            }
+        });
         adapter.setOnItemClickListener((a, v, position) -> {
             FunctionBean functionBean = functionBeans.get(position);
             switch (functionBean.id) {
@@ -142,9 +148,6 @@ public class DemoFragment extends Fragment {
                     break;
                 case 5: // 蓝牙音乐
                     startActivity(BluetoothMusicActivity.newInstance(requireActivity()));
-                    break;
-                case 6: // 云听测试
-                    startActivity(YunTingActivity.newInstance(requireActivity()));
                     break;
                 case 7: // 多个MediaClient
                     startActivity(MediaClientChangeActivity.newInstance(requireActivity()));

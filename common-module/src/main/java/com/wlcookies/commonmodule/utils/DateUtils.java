@@ -1,47 +1,53 @@
 package com.wlcookies.commonmodule.utils;
 
+import android.annotation.SuppressLint;
+
+import java.util.Formatter;
+import java.util.Locale;
+
 /**
  * date methods
  */
 public class DateUtils {
 
-    public static String hhmm(int time) {
-        String timeStr = null;
-//        int hour = 0;
-        int minute;
-        int second;
-        if (time <= 0)
-            return "00:00";
-        else {
-            second = time / 1000;
-            minute = second / 60;
-            if (second < 60) {
-                timeStr = "00:" + unitFormat(second);
-            } else if (minute < 60) {
-                second = second % 60;
-                timeStr = "" + unitFormat(minute) + ":" + unitFormat(second);
+    private static final StringBuilder mFormatBuilder = new StringBuilder();
+    @SuppressLint("ConstantLocale")
+    private static final Formatter mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
+
+    public static String hhmm(int timeMs) {
+        try {
+            if (timeMs <= 0) {
+                return "00:00";
             }
+            int totalSeconds = timeMs / 1000;
+            int seconds = totalSeconds % 60;
+            int minutes = (totalSeconds / 60) % 60;
+            int hours = totalSeconds / 3600;
+
+            mFormatBuilder.setLength(0);
+            if (hours > 0) {
+                return mFormatter.format("%02d:%02d:%02d", hours, minutes, seconds).toString();
+            } else {
+                return mFormatter.format("%02d:%02d", minutes, seconds).toString();
+            }
+        } catch (Exception e) {
+            return "00:00";
         }
-        return timeStr;
     }
 
-    public static String unitFormat(int i) {// 时分秒的格式转换
-        String retStr = null;
-        if (i >= 0 && i < 10)
-            retStr = "0" + i;
-        else
-            retStr = "" + i;
-        return retStr;
-    }
-
-    public static String unitFormat2(int i) {// 毫秒的格式转换
-        String retStr;
-        if (i >= 0 && i < 10)
-            retStr = "00" + i;
-        else if (i >= 10 && i < 100) {
-            retStr = "0" + i;
-        } else
-            retStr = "" + i;
-        return retStr;
+    /**
+     * 时分秒转整型
+     *
+     * @param str
+     * @return
+     */
+    private int wav(String str) {
+        String str1[] = str.split(":");
+        //0->时，1->分，2->秒
+        int m = Integer.parseInt(str1[2]);
+        int f = Integer.parseInt(str1[1]) * 60;
+        int s = Integer.parseInt(str1[0]) * 60 * 60;
+        int miao = (m + f + s) * 1000;
+        return miao;
     }
 }

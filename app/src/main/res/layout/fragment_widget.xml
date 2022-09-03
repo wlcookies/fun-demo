@@ -7,15 +7,13 @@
     android:orientation="vertical"
     tools:context=".ui.WidgetFragment">
 
-    <com.wlcookies.fundemo.widget.CameraImageView
-        android:id="@+id/camera_iv"
-        android:layout_width="@dimen/dp_200"
-        android:layout_height="@dimen/dp_200" />
-
-    <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/progress_sb"
+    <EditText
+        android:id="@+id/pkg_et"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="360"
-        android:min="1" />
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/pkg_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </androidx.appcompat.widget.LinearLayoutCompat>

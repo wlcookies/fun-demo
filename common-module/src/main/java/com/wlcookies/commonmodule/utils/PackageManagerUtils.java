@@ -13,9 +13,11 @@ public class PackageManagerUtils {
     }
 
     public static void test(PackageManager pm) {
-        List<ApplicationInfo> installedApplications = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        List<ApplicationInfo> installedApplications = pm.getInstalledApplications(0);
         for (ApplicationInfo installedApplication : installedApplications) {
-//            LogUtils.d(installedApplication.packageName );
+            if ("res/cs.xml".equals(installedApplication.loadLabel(pm).toString())) {
+                LogUtils.d(installedApplication.packageName + " === " + installedApplication.loadLabel(pm).toString());
+            }
         }
     }
 }

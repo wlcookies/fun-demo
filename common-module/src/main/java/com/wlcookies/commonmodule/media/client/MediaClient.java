@@ -173,7 +173,6 @@ public class MediaClient {
      */
     public ListenableFuture<SessionResult> skipToNext() {
         if (mMediaController != null) {
-            LogUtils.d("执行下一曲");
             return mMediaController.skipToNextPlaylistItem();
         } else {
             return null;
@@ -185,7 +184,6 @@ public class MediaClient {
      */
     public ListenableFuture<SessionResult> skipToPrevious() {
         if (mMediaController != null) {
-            LogUtils.d("执行上一曲");
             return mMediaController.skipToPreviousPlaylistItem();
         } else {
             return null;
@@ -263,7 +261,7 @@ public class MediaClient {
             LogUtils.d("MediaSession - onConnected " + controller.getConnectedToken());
 
             // setting connect state
-            isConnected(true);
+            isConnected(true, controller);
             // setting play state
             setPlayState(controller);
             // update play progress
@@ -300,9 +298,6 @@ public class MediaClient {
         @Override
         public void onPlaybackCompleted(@NonNull MediaController controller) {
             super.onPlaybackCompleted(controller);
-
-            LogUtils.d("MediaSession - onPlaybackCompleted");
-
             if (mMediaClientViewModel != null) {
                 // update current playing Component
 //                LogUtils.d("MediaSession - 设置播放状态 " + controller.getPlayerState());
@@ -318,9 +313,8 @@ public class MediaClient {
         @Override
         public void onDisconnected(@NonNull MediaController controller) {
             super.onDisconnected(controller);
-            LogUtils.d("MediaSession - onDisconnected");
-            isConnected(false);
-
+            LogUtils.d("MediaSession - onDisconnected " + controller);
+            isConnected(false, controller);
             // 发起重连操作
             reConnectHandler.postDelayed(new Runnable() {
                 @Override
@@ -328,7 +322,8 @@ public class MediaClient {
                     LogUtils.d("MediaSession - 正在尝试重新连接 " + mServiceName);
                     createMediaController();
                 }
-            }, 1000 * 10);
+            }, 1000 * 5);
+
         }
 
         // ---------------------------------------------------------------------------------
@@ -422,9 +417,19 @@ public class MediaClient {
      *
      * @param isConnected true or false
      */
-    private void isConnected(Boolean isConnected) {
+    private void isConnected(Boolean isConnected, MediaController controller) {
         if (mMediaClientViewModel != null) {
             mMediaClientViewModel.setConnectState(mServiceName, isConnected);
+            // 连接成功就添加当前媒体数据
+            if (isConnected) {
+                MediaItem currentMediaItem = controller.getCurrentMediaItem();
+                if (currentMediaItem != null) {
+                    MediaMetadata metadata = currentMediaItem.getMetadata();
+                    setCurrentMediaItem(metadata);
+                }
+            } else {
+                setCurrentMediaItem(null);
+            }
         }
         LogUtils.d("MediaSession - isConnected " + isConnected);
     }
@@ -436,7 +441,6 @@ public class MediaClient {
      */
     private void setCurrentMediaItem(MediaMetadata mediaMetadata) {
         if (mMediaClientViewModel != null) {
-            LogUtils.d("MediaSession - setCurrentMediaItem " + mediaMetadata.toString());
             mMediaClientViewModel.setCurrentMediaItem(mServiceName, mediaMetadata);
         }
     }

@@ -3,5 +3,4 @@
     <item android:drawable="@drawable/shape_demo_list_item_bg_" android:state_pressed="true" />
     <item android:drawable="@drawable/shape_demo_list_item_bg" android:state_pressed="false" />
     <item android:drawable="@drawable/shape_demo_list_item_bg" />
-
 </selector>

@@ -2,7 +2,7 @@ package com.wlcookies.fundemo;
 
 
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
+import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -19,10 +19,11 @@ import com.wlcookies.fundemo.ui.WidgetFragment;
 
 public class MainActivity extends BaseActivity implements NavigationBarView.OnItemSelectedListener {
 
-    public static final String TAG = MainActivity.class.getSimpleName();
 
     private ActivityMainBinding activityMainBinding;
 
+
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,7 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
 
         initData();
     }
+
 
     private void initData() {
         activityMainBinding.mainBottomNavView.setOnItemSelectedListener(this);
@@ -59,9 +61,11 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
         return true;
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         activityMainBinding = null;
     }
+
 }
