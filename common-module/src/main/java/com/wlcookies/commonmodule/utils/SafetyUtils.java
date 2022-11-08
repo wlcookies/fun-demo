@@ -2,38 +2,48 @@ package com.wlcookies.commonmodule.utils;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
+/**
+ * Get object values in a safe way
+ * <p>
+ * Contains the following methods:
+ *     <ul>
+ *         <li>{@link String} - {@link #getString(String)} {@link #getString(String, String)}</li>
+ *     </ul>
+ * </p>
+ *
+ * @author weiguo
+ * @version 1.0
+ */
 public class SafetyUtils {
 
     private SafetyUtils() {
     }
 
     /**
-     * 获取安全的String
+     * get string in a safe way
      *
-     * @param str 字符串对象
-     * @return string
+     * @param str String
+     * @return String returns "" if str reference is null
      */
-    public static @NonNull
-    String getString(String str) {
-        if (str == null) {
-            return "";
-        } else {
-            return str;
-        }
+    @NonNull
+    public static String getString(String str) {
+        return Objects.isNull(str) ? "" : str;
     }
 
     /**
-     * 获取安全的String，null "" 返回 defaultStr
+     * get string in a safe way
      *
-     * @param str 字符串对象
-     * @return string
+     * @param str        String
+     * @param defaultStr NonNull default String
+     * @return String returns default string if str reference is null or is ""
      */
-    public static @NonNull
-    String getString(String str, @NonNull String defaultStr) {
-        if (str == null || "".equals(str)) {
-            return defaultStr;
-        } else {
-            return str;
-        }
+    @NonNull
+    public static String getString(String str, @NonNull String defaultStr) {
+        String result = getString(str);
+        return "".equals(result) ? defaultStr : result;
     }
+
+
 }

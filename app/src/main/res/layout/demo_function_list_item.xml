@@ -10,7 +10,6 @@
     android:padding="@dimen/dp_5">
 
     <ImageView
-        android:background="@drawable/selector_demo_list_item_bg"
         android:id="@+id/icon_iv"
         android:layout_width="@dimen/dp_25"
         android:layout_height="@dimen/dp_25"

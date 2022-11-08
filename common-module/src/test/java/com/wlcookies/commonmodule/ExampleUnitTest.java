@@ -17,19 +17,6 @@ import java.util.Map;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        List<String> ss = new ArrayList<>();
-        HashMap<String, Boolean> map = new HashMap<>();
-        map.put("s1", true);
-        map.put("s2", true);
-        map.put("s3", true);
-        map.put("s4", true);
 
-        for (String s : map.keySet()) {
-            Boolean aBoolean = map.get(s);
-            if (aBoolean != null && !aBoolean) {
-                ss.add(s);
-            }
-        }
-        System.out.println(ss);
     }
 }

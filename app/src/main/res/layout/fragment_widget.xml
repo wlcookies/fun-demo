@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,10 +11,23 @@
     <EditText
         android:id="@+id/pkg_et"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp" />
 
     <Button
         android:id="@+id/pkg_bt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/test_iv"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80"
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="#FFFFFF"
+        android:defaultFocusHighlightEnabled="false"
+        app:shapeAppearanceOverlay="@style/roundedCornerImageStyle"
+        app:srcCompat="@mipmap/ic_launcher"
+        app:strokeWidth="@dimen/dp_2" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>

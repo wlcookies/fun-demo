@@ -6,8 +6,9 @@ import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.R;
 import androidx.appcompat.widget.AppCompatSeekBar;
+
+import androidx.appcompat.R;
 
 /**
  * 可以通过setTouch设置是否touch

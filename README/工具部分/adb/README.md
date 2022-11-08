@@ -51,6 +51,19 @@ adb shell am start  -n com.android.car.settings/com.android.car.settings.Setting
 
 adb shell am start -n com.debug.loggerui/.MainActivity
 
+adb shell am start -n com.innoventions.sensorkinetics/com.innoventions.sensorkinetics.SensorKineticsActivity
+
+adb shell am start  -n com.bmi.bmihicar/.MainActivity
+
+adb shell dumpsys meminfo
+
+# 系统时钟
+adb shell am start -n com.android.deskclock/.DeskClock
+
+adb shell am start -n com.android.music/.MusicPicker
+
+adb shell am start -n com.android.dialer
+
 ```
 
 ## 查看APK是32位还是64位
@@ -73,8 +86,14 @@ armeabi-v8a:armv8架构 （64位）
 x86_64:x86_64架构 （64位）
 ```
 
-
-
 [getprop，dumpsys](https://blog.csdn.net/qq_28171461/article/details/60964563)
 
 [命令行工具](https://developer.android.google.cn/studio/command-line?hl=zh-cn)
+
+adb shell ls /system/bin 
+
+查询进程
+1. adb shell ps|findstr com.huawei.dmsdpdevice
+2. adb shell ps
+杀进程
+adb shell kill PID

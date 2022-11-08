@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="180"
+                android:centerColor="#B4B8BE"
+                android:endColor="#FEFEFE"
+                android:startColor="#FEFEFE"
+                android:type="linear" />
+            <corners android:radius="@dimen/dp_16" />
+        </shape>
+    </item>
+    <!-- create the stroke for top, left, bottom and right with the dp you want -->
+    <item
+        android:bottom="@dimen/dp_2"
+        android:drawable="@drawable/shape_all_app_title_bg"
+        android:left="@dimen/dp_2"
+        android:right="@dimen/dp_2"
+        android:top="@dimen/dp_2" />
+</layer-list>

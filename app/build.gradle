@@ -37,6 +37,26 @@ android {
         }
     }
 
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                if (variant.buildType.name == 'release') {
+                    getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + File.separator + "release")
+                    outputFileName = "fun-demo.apk"
+                }
+            }
+    }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            Set<File> fileSet = options.bootstrapClasspath.getFiles()
+            List<File> newFileList = new ArrayList<>()
+            //"../framework.jar" 为相对位置，需要参照着修改，或者用绝对位置
+            newFileList.add(new File("sdk/framework.jar"))
+            newFileList.addAll(fileSet)
+            options.bootstrapClasspath = files(newFileList.toArray())
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -59,13 +79,28 @@ android {
     }
 }
 
+preBuild {
+    doLast {
+        def imlFile = file("../.idea/modules/app/" + project.parent.name + "." + project.name + ".iml")
+        try {
+            def parsedXml = (new XmlParser()).parse(imlFile)
+            def jdkNode = parsedXml.component[1].orderEntry.find { it.'@type' == 'jdk' }
+            parsedXml.component[1].remove(jdkNode)
+            def sdkString = "Android API " + android.compileSdkVersion.substring("Android-".length()) + " Platform"
+            new Node(parsedXml.component[1], 'orderEntry', ['type': 'jdk', 'jdkName': sdkString, 'jdkType': 'Android SDK'])
+            groovy.xml.XmlUtil.serialize(parsedXml, new FileOutputStream(imlFile))
+        } catch (FileNotFoundException e) {
+        }
+    }
+}
+
 dependencies {
+    compileOnly files('sdk/framework.jar')
     implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat_version}"
     implementation "com.google.android.material:material:${rootProject.ext.material_version}"
     implementation "androidx.constraintlayout:constraintlayout:2.1.3"
-    implementation project(path: ':increase-decrease-widget')
 
     testImplementation "junit:junit:${rootProject.ext.junit_version}"
     androidTestImplementation "androidx.test.ext:junit:${rootProject.ext.ext_junit_version}"
@@ -92,4 +127,7 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    implementation "com.airbnb.android:lottie:5.2.0"
 }
+
